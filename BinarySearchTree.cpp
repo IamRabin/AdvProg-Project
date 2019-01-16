@@ -1,7 +1,7 @@
 /**
  * @file
  * @author  Rabindra Khadka <rabindra.khadka@ymail.com>
- *          Tomasso
+ *          Tommaso Rodani <trodnai@sissa.it>
  *
  * @version 1.0
  *
@@ -14,6 +14,7 @@
 #include<string>
 #include<vector>
 #include<algorithm>
+#include<memory>
 
 void printElements(auto& C)
 {
