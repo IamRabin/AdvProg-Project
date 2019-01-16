@@ -1,0 +1,2 @@
+impoprt nltk
+nltk.download()
