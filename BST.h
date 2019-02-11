@@ -46,7 +46,8 @@
 template <typename K, typename D >
 class BstNode
 {
-protected:
+private:
+
     BstNode<K,D>* left;   //left child
     BstNode<K,D>* right; // right child
     BstNode<K,D>* par;  //parent
@@ -54,71 +55,51 @@ protected:
     D data;  // Data
     K key;  //Key value associated with data
 
+};
 
 public:
+/**
+ * [BstNode description]
+ *
+ * --------------------------------------------------------------------------
+ * Usage:
+ *
+ */
 
-    /**
-     * This constructor will copy the value data and key into a BstNode.
-     * Usage:     
-     * -----------------------------------------------------------------------
-     *
-     */
+   BstNode(const K& key,const D& data,BstNode<K,D>* l,BstNode<K,D>* r);
 
-    BstNode(const K& key,const D& data,BstNode<K,D>* l,BstNode<K,D>* r);
+/**
+ * [GetNewNode Description]
+ * This function will create a new node in the heap.It takes key and value
+ * (data) as an input.
+ * ---------------------------------------------------------------------------
+ * Usage: BstNode<int,string> mynew_Node;
+ */
+    BstNode* GetNewNode(k key, D data);
+
+/**
+ * [Insert Description]
+ *This function will insert key and value in the tree.
+ *----------------------------------------------------------------------------
+ *Usage:insert(BstNode* root,D data,K key)
+ *Usage: mytree.insert(root,"A string", 15);
+ */
+
+    BstNode* insert(BstNode* root,D data,K key);
+
+/**
+ * [find Description]
+ *This function will take the arguments of root node, key and data to be found.
+ *This will return true if the data is found and false otherwise.
+ * ---------------------------------------------------------------------------
+ * Usage:
+ */
+
+    bool find(BstNode* root,int data);
 
 
-   /**
-    * Secondary node constructor which makes a copy of the original one.
-    * Usage: BstNode<K,D> one =two;
-    *        one=two;
-    * -------------------------------------------------------------------------
-    * Allows to make this tree a deep copy of the original tree
-     */
+     clear()
 
-    BstNode(const BstNode<K,D>*& copy);
-
-
-/* Mutable member functions allowing us to change key and value */
-    /**
-     * usage:
-     * .......................................................................
-     * Allows to change and return the key.
-     */
-    K& get_key() {return key};
-
-    /**
-     * [get_data description]
-     *........................................................................
-     *
-     * @return [description]
-     */
-    D& get_data() {return data; }
-
-   /**
-    * [get_left description]
-    */
-    BstNode<K,D>*& get_left() {return left;}
-
-    /**
-     * [get_right description]
-     */
-    BstNode<K,D>*& get_right() {return right;}
-
-    void set_key(const K& entry ){key=entry}
-    void set_data(const D& Value ){data=Value;}
-    void set_left(BstNode* l){left=l;}
-    void set_right(BstNode* r){right=l;}
-
-/* Immutable Member Functions */
-
-   const K& get_key() const{return key;}
-   const D& get_data const{return data;}
-   const BstNode<K,D>* get_left() const {return left;}
-   const BstNode<K,D>* get_right() const {return right;}
-
- /*Convienence Functions */
-
- bool is_leaf ()const {return (left==NULL) && (right==NULL);}
 
 };
 
@@ -136,6 +117,55 @@ left=l;
 right=r;
 par=p;
 }
+
+template <typename K, typename D >
+BstNode<K,D>::GetNewNode(D data, K key)
+{
+    BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
+    newNode -> data = data;
+    newNode -> key = key;
+    newNode -> left = newnode -> right = newNode -> par = NULL;
+    return newNode;
+}
+
+
+template <typename K, typename D >
+BstNode<K,D>::BstNode* insert(BstNode* root,D data,K key)
+{
+    if(root=NULL) // case of empty tree
+    {
+        root=GetNewNode(data,key);// if empty tree create a new node and set as root
+        return root;
+    }
+    // if data to be inserted is smaller, insert in left child.
+    else if (data<=root -> data) //if inserted data is less than data in root
+    {
+        root->left= insert (root->left, data, key);//passing address of left child
+    }
+    //else, insert in right child.
+    else
+    {
+        root->right=insert(root->right,data);
+    }
+    return root; //return type pointer to BstNode , collects the root address
+
+}
+
+template <typename K, typename D >
+BstNode<K,D>::bool find(BstNode* root,D data,K key)
+{
+    if (root==NULL) return false;
+    else if (root->data==data) return true;
+    else if (data <= root->data) return find(root->left,data);
+    else return find(root->right, data);
+
+}
+
+
+
+
+
+
 
 template <typename K, typename D >
 BstNode<K,D>::BstNode(const BstNode<K,D>*& copy)
