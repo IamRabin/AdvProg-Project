@@ -55,18 +55,9 @@ private:
     D data;  // Data
     K key;  //Key value associated with data
 
-};
 
 public:
-/**
- * [BstNode description]
- *
- * --------------------------------------------------------------------------
- * Usage:
- *
- */
 
-   BstNode(const K& key,const D& data,BstNode<K,D>* l,BstNode<K,D>* r);
 
 /**
  * [GetNewNode Description]
@@ -75,30 +66,31 @@ public:
  * ---------------------------------------------------------------------------
  * Usage: BstNode<int,string> mynew_Node;
  */
-    BstNode* GetNewNode(k key, D data);
+    BstNode<K,D>* GetNewNode(k key, D data);
 
 /**
  * [Insert Description]
- *This function will insert key and value in the tree.
+ *This function will allow to insert key and value in the tree.
  *----------------------------------------------------------------------------
  *Usage:insert(BstNode* root,D data,K key)
  *Usage: mytree.insert(root,"A string", 15);
  */
 
-    BstNode* insert(BstNode* root,D data,K key);
+    BstNode<K,D>* insert(BstNode<K,D>* root,K key,D data);
 
 /**
  * [find Description]
  *This function will take the arguments of root node, key and data to be found.
- *This will return true if the data is found and false otherwise.
+ *This will return true if the key is found and false otherwise.
  * ---------------------------------------------------------------------------
  * Usage:
  */
 
-    bool find(BstNode* root,int data);
+   bool find(BstNode<K,D>* root, K key, D data);
 
 
-     clear()
+
+
 
 
 };
@@ -108,20 +100,12 @@ public:
 
 
 
-template <typename K, typename D >
-BstNode<K,D>::BstNode(const K& Key,const D& value=D(),p(NULL),l(NULL),r(NULL)
-{
-data = value;
-key=Key;
-left=l;
-right=r;
-par=p;
-}
+
 
 template <typename K, typename D >
 BstNode<K,D>::GetNewNode(D data, K key)
 {
-    BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
+    BstNode<K,D>* newNode = new BstNode(); // 'new' creates a node in the heap.
     newNode -> data = data;
     newNode -> key = key;
     newNode -> left = newnode -> right = newNode -> par = NULL;
@@ -130,72 +114,33 @@ BstNode<K,D>::GetNewNode(D data, K key)
 
 
 template <typename K, typename D >
-BstNode<K,D>::BstNode* insert(BstNode* root,D data,K key)
+BstNode<K,D>::BstNode<K,D>* insert(BstNode<K,D>* root,D data,K key)
 {
-    if(root=NULL) // case of empty tree
+    if(root=NULL) // In case of empty tree
     {
-        root=GetNewNode(data,key);// if empty tree create a new node and set as root
+        root=GetNewNode(data,key);//  create a new node and set as root
         return root;
     }
-    // if data to be inserted is smaller, insert in left child.
-    else if (data<=root -> data) //if inserted data is less than data in root
+    //if data to be inserted is smaller than data in root, insert in left child.
+    else if (key<=root -> key)
     {
-        root->left= insert (root->left, data, key);//passing address of left child
+        root->left= insert (root->left, data, key);//pass address of left child.
     }
     //else, insert in right child.
     else
     {
-        root->right=insert(root->right,data);
+        root->right=insert(root->right,data,key);
     }
-    return root; //return type pointer to BstNode , collects the root address
+    return root; //return type is pointer to BstNode;collects the root address.
 
 }
 
 template <typename K, typename D >
-BstNode<K,D>::bool find(BstNode* root,D data,K key)
+BstNode<K,D>::bool find(BstNode<K,D>* root,D data,K key)
 {
     if (root==NULL) return false;
-    else if (root->data==data) return true;
-    else if (data <= root->data) return find(root->left,data);
-    else return find(root->right, data);
+    else if (root->key==key) return true;
+    else if (key <= root->key) return find(root->left,key);
+    else return find(root->right, key);
 
-}
-
-
-
-
-
-
-
-template <typename K, typename D >
-BstNode<K,D>::BstNode(const BstNode<K,D>*& copy)
-{
-    if(copy==NULL)
-       this==NULL;
-
-    else
-    {
-          data=copy.data;
-          key=copy.key;
-          left=copy.left;
-          right=copy.right;
-          par=copy.par;
-      }
-}
-
-
-
-
-template <typename K, typename D,typename compare=std::less<K> >
-class BalanceTree{
-public:
-    /**
-     * constructor:BalanceTree(compare comp=compare());
-     * usage:AVLTree<string,int>myBalanceTree;
-     * usage:BalanceTree<string,int>myBalanceTree(MycomparisonFunction);
-     * ------------------------------------------------------------------
-     * Builds a new tree that compares keys using the indicated
-     * comparator.
-     */
-    BalanceTree(compare comp=compare());
 }
