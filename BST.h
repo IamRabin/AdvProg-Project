@@ -18,6 +18,8 @@
  * 8. cend()-return a proper const_iterator
  * 9. balance()- balances the tree.
  * 10.find()- finds a given key and returning an iterator to that node.
+ * 11.copy constructors
+ * 12.move semantics
  *
  *
  */
@@ -50,15 +52,21 @@ private:
     struct BstNode
     {
 
-    BstNode<K,D>* left;   //left child
-    BstNode<K,D>* right; // right child
-    BstNode<K,D>* par;  //parent
+    BstNode* left;   //left child
+    BstNode* right; // right child
+    BstNode* par;  //parent
 
     D data;  // Data
     K key;  //Key value associated with data
     std::pair<const K, D> node_data // data is stored in node_data
 
+    BstNode(const K& key, const D&);//cosntructor initialises the key/value pair
+
      };
+
+     comparator mComp; //compartor used to compare and store elements.
+     BstNode* rootptr;//pointer to root node in BST.
+
      friend class iterator;
      friend class const_iterator;
 
@@ -74,8 +82,8 @@ public:
  * This constructor constructs a new empty tree and compares key based on the
  * choosen comparison type.
  */
-
   BSTree(comparator comp=comparator());
+
 
 
 /**
@@ -104,6 +112,20 @@ public:
    constexpr BSTree& operator=(const BSTree& copy);
 
 
+ /**[Move Semantics Description]
+ * Usage:
+ *-----------------------------------------------------------------------------
+ * Move constructor, create a new BST by swapping members.
+ * Move assignment, move the members of other onto this.
+ *
+ * compiler chooses between the copy constructor and the move constructor
+ *  based on whether the argument to the assignment operator is an lvalue or
+ *  an rvalue.
+ */
+    BST (BST<K,V,comp> &&other);
+    BST& operator=(BST<K,V,comp> &&other);
+
+
 /**
  *[GetNewNode Description]
  * This function will create a new node in the heap.It takes key and value
@@ -111,7 +133,7 @@ public:
  * -----------------------------------------------------------------------------
  * Usage: BstNode<int,string> mynew_Node;
  */
-    constexpr BstNode<K,D>* GetNewNode(k key, D data);
+    constexpr BstNode* GetNewNode(k key, D data);
 
 
 /**
@@ -121,7 +143,7 @@ public:
  *Usage:insert(BstNode* root,D data,K key)
  *Usage: mytree.insert(root,"A string", 15);
  */
-    constexpr BstNode<K,D>* insert(BstNode<K,D>* root,K key,D data);
+    constexpr BstNode* insert(BstNode* rootptr, K& key,D& data);
 
 
 /**
@@ -131,7 +153,8 @@ public:
  * -----------------------------------------------------------------------------
  * Usage:
  */
-   constexpr bool find(BstNode<K,D>* root, K key, D data);
+   constexpr iterator find(BstNode* rootptr, K key, D data);
+
 
 
   /**
@@ -144,49 +167,121 @@ public:
    class iterator;
    class const_iterator;
 
-   constexpr Iterator begin();
-   constexpr Iterator end()
 
+/**
+ *
+ * Usage:for (myTree<string, int>::iterator itr = i.begin();
+ *          itr != i.end(); ++itr) { ... }
+ *-----------------------------------------------------------------------------
+ * begin() and end () returns iterator to fully traverse the tree.It also acts
+ * as a pointer to std::pair<const key,Entry>.
+ */
+   constexpr iterator begin();
+   constexpr iterator end()
    constexpr const_iterator begin();
    constexpr const_iterator end();
 
-   constexpr const_iterator cbegin();
-
-   constexpr const_iterator cend();
-
-   void balance();
-
-   void clear();
 
 /**
- * [operator[] description]
+ *Usage:for (myTree<string, int>::const_iterator itr = i.cbegin();
+ *          itr != i.cend(); ++itr) { ... }
+ * ----------------------------------------------------------------------------
+ * cbegin and cend returns a const_iterator pointing to the first node
+ * and past the last node element respectively.It cannot modify the contents.
+ */
+   constexpr const_iterator cbegin();
+   constexpr const_iterator cend();
+
+
+/**
+ * [balance description]
+ * Performs balancing of the tree based on the concept of minimum height.
+ * Traverses the BST inorder and store  results in a vector which produces
+ * sorted sequence.Then a balanced BST is build using the recursive approach.
+ * ----------------------------------------------------------------------------
+ */
+   void balance();
+
+
+   /**
+    * [clear description]
+    * -------------------------------------------------------------------------
+    * Deletes entire key-value pair from the tree.
+    */
+     void clear();
+
+
+/**
+ *[operator[] description]
  * Usage: myTree [" a string" ]=151;
  *------------------------------------------------------------------------------
- * It will return refrence to data (D) with the indicated key in the tree.
- * Incase the key is not in the tree, it gets inserted into the tree with
- * default constructor and its data.
+ *  It will return refrence to data (D) with the indicated key in the tree.
+ *  Incase the key is not in the tree, it gets inserted into the tree with
+ *  default constructor and its data.
  */
    constexpr D& operator[] (const K& key );
 
+
+/**
+ *[const operator[] description]
+ * Usage: myTree [" a string" ]=151;
+ *-----------------------------------------------------------------------------
+ * It will return a refrence to data (D) with the indicated key in the
+ * tree.Incase the key is not found in the tree, throws out of range exception.
+ */
 
    constexpr const D& operator[] (const K& key) const;
 
 
 
-
-
+/**
+  *
+  * ---------------------------------------------------------------------------
+  * Overload of put to operator <<.It allows to print the key-value pair in
+  * chain with order.
+  */
+    std::ostream& operator<<(std::ostream& os, const BST<K,D,comp>& mytree)
 
 };
 
 
+ /**
+   * Comparison operators for BSTree
+   */
+    template <typename K, typename D,comparator >
+    bool operator==(const BSTree<K, V, comp>& lhs,
+                    const BSTree<K, V, comp>&  rhs);
 
+
+
+
+
+
+/* * * * * Implementation Below This Point * * * * */
+
+
+
+
+
+
+
+
+
+
+/* Constructor initialises a new empty tree. */
+
+template <typename K, typename D,comparator >
+BstTree<K,D,comparator>::BSTree(comparator comp):mComp(comp)
+{
+    par=left=right=rootptr=NULL;
+}
 
 
 
 
 
 template <typename K, typename D,comparator >
-BstNode<K,D>::GetNewNode(D data, K key)
+BstTree<K,D,comparator>::GetNewNode(D data, K key)
 {
     BstNode<K,D>* newNode = new BstNode(); // 'new' creates a node in the heap.
     newNode -> data = data;
@@ -197,7 +292,7 @@ BstNode<K,D>::GetNewNode(D data, K key)
 
 
 template <typename K, typename D,comparator >
-BstNode<K,D>::BstNode<K,D>* insert(BstNode<K,D>* root,D data,K key)
+BstNode<K,D,comparator>::BstNode<K,D>* insert(BstNode<K,D>* rootptr,D data,K key)
 {
     if(root=NULL) // In case of empty tree
     {
@@ -219,9 +314,9 @@ BstNode<K,D>::BstNode<K,D>* insert(BstNode<K,D>* root,D data,K key)
 }
 
 template <typename K, typename D,comparator >
-BstNode<K,D>::bool find(BstNode<K,D>* root,D data,K key)
+BstNode<K,D>::iterator,bool find(BstNode<K,D>* root,D data,K key)
 {
-    if (root==NULL) return false;
+    if (root==NULL) return ;
     else if (root->key==key) return true;
     else if (key <= root->key) return find(root->left,key);
     else return find(root->right, key);
