@@ -159,6 +159,46 @@ BstNode<K,D,comparator>::BstNode* FindMin(BstNode* rootptr)
 
 
 
+/**
+ * begin() and end () returns iterator(s) to fully traverse the tree.
+ */
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::iterator begin()
+{ return iterator{FindMin()}; }
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::iterator end()
+{ return iterator{nullptr}; }
+
+/**
+ * begin() and end () returns const_iterator(s) to fully traverse the tree.
+ */
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::const_iterator begin()
+{ return const_iterator{FindMin()}; }
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::const_iterator end()
+{ return const_iterator{nullptr}; }
+
+
+/**
+ * cbegin and cend returns a const_iterator pointing to the first node
+ * and past the last node element respectively.
+ * It cannot modify the contents.
+ *
+ */
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::const_iterator cbegin()
+const { return const_iterator{FindMin()}; }
+
+template <typename K, typename D,comparator >
+typename BSTree<K,D,comparator>::const_iterator cend()
+const { return const_iterator{nullptr}; }
+
 
 
 /**
@@ -282,7 +322,7 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
   template <typename K, typename D,comparator>
   constexpr BSTree<K,D,comparator>::BSTree& operator=(const BSTree& copy)
   {
-    clear(); //free memory
+    clear();
     copyHelper(copy.rootptr); //call helper to perform copy
     return *this;
   }
