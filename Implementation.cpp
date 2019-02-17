@@ -184,7 +184,7 @@ BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
 
 
 
-********* Iterator Implementation*********************
+//********* Iterator Implementation*********************
 
 template <typename K, typename D,comparator >
 BSTree<K,D,comparator>::iterator
@@ -217,7 +217,7 @@ public:
       }
       return *this;
     }
-    //if there aren't right child, go up till there is a right child and return it
+    //if there aren't right child, go up till there is one and return it
     else {
       node_data* up = current -> par;
       while ( up != nullptr && current == up->right) {
@@ -254,3 +254,35 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
     using it::operator!=;
 
 }
+
+
+  //copyHelper function, copy node and than recursively child nodes
+  template <typename K, typename D,comparator>
+  void BSTree<K,D,comparator>::copyHelper(BstNode * nodeptr)
+  {
+    if (nodeptr)
+    {
+      insert(nodeptr->data);
+      copyHelper(nodeptr->left);
+      copyHelper(nodeptr->right);
+    }
+  }
+
+
+
+  //copy Constructor, use copyHelper
+  template <typename K, typename D,comparator>
+  constexpr BSTree<K,D,comparator>::BSTree(const BSTree& copy)
+  {
+    rootptr=nullptr;
+    copyHelper(copy.rootptr);
+  }
+
+  //copy assignment, use copyHelper to copy all members from one tree to the other
+  template <typename K, typename D,comparator>
+  constexpr BSTree<K,D,comparator>::BSTree& operator=(const BSTree& copy)
+  {
+    clear(); //free memory
+    copyHelper(copy.rootptr); //call helper to perform copy
+    return *this;
+  }
