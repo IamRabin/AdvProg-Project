@@ -168,18 +168,42 @@ BstNode<K,D,comparator>::BstNode* FindMin(BstNode* rootptr)
  * @param  key [key is the reference to const K type]
  * -----------------------------------------------------------------------------
  * This operator overloading function will call insert to get a pair of an
- * iterator and and a , then look at its second field.
+ * iterator and a value , then look at its second field.
  */
 template <typename K, typename D,comparator >
 BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
 {
-    iterator itr = find(key);//get the underlying iteratorby calling find
-    if (itr != end())
+    iterator itr = find(key);//get the underlying iterator by calling find
+    if (itr != end()){
     return (*itr).second;
+    }
     insert(node_data{key, D{}});
     return (*find(key)).second;
   }
 }
+
+
+
+/**
+ *[const operator[] description]
+ * Usage: myTree [" a string" ]=151;
+ * @param  key [key is the reference to const K type]
+ *-----------------------------------------------------------------------------
+ * It will return a refrence to data (D) with the indicated key in the
+ * tree.Incase the key is not found in the tree, throws out of range
+ * exception.
+ */
+ template <typename K, typename D,comparator >
+ BSTree<K,D,comparator>::
+ constexpr const D& operator[] (const K& key) const
+ {
+    const_iterator itr = find(key);
+    if (iter != end()) {
+        return iter -> second;
+    }
+    throw std::out_of_range{" key not found in the tree"};
+}
+ }
 
 
 
@@ -217,7 +241,8 @@ public:
       }
       return *this;
     }
-    //if there aren't right child, go up till there is a right child and return it
+    //if no any right child found,walk up till it finds the right child & return
+
     else {
       node_data* up = current -> par;
       while ( up != nullptr && current == up->right) {
@@ -254,3 +279,89 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
     using it::operator!=;
 
 }
+
+
+/**
+ * [Move constructor ]
+ *
+ * @param && other [Takes a rvalue reference to the class type]
+ * ----------------------------------------------------------------------------
+ * The new tree is created by swapping members.
+ */
+
+    template <typename K, typename D,comparator >
+    BSTree<K,D,comparator>:: BST (BST<K,V,comp> &&other):
+    rootptr{ std::move(other.rootptr) }
+    {std::cout << "Last tree constructed with move-constructor." << std::endl;}
+
+
+/**
+ *[Move Assignment]
+ *@param && other[passes on rvalue reference to the class type]
+ *-----------------------------------------------------------------------------
+ * In move assignment,it copies the data members and release the data pointer
+ * from the source object so that the destructor does not free the memory
+ * multiple times.
+ */
+
+    template <typename K, typename D,comparator >
+    BSTree<K,D,comparator>:: BST& operator=(BST<K,V,comp> &&other)
+    {
+      // if the tree at the left hand side of the assignment isn't empty,
+      // it's cleared. Existing nodes are deleted.
+      if (!is_empty())
+      {
+        cout << "Clearing out previous content at left hand side..." << endl;
+        rootptr = NULL;
+      }
+      // if the other tree isn't empty, its root is moved.
+      if (!other.is_empty())
+      {
+        cout << "Moving root to the left-side." << endl;
+        rootptr = std::move(other.rootptr);
+      }
+
+      return *this;
+    }
+
+
+
+  /**
+    *[Put to operator << description]
+    *@param const BST<K,D,comp>& mytree [reference to the constant class type]
+    * -----------------------------------------------------------------------
+    * Overload of put to operator <<.It allows to print the key-value pair in
+    * chain with order.
+    */
+      template <typename K, typename D,comparator >
+      BSTree<K,D,comparator>::
+      std::ostream& operator<<(std::ostream& os, const BST<K,D,comp>& mytree)
+      {
+
+       for (const auto& x : mytree)
+
+         { os << x.first << ": " << x.second << std::endl;}
+
+       return os;
+
+        }
+
+
+
+
+
+
+
+    /**
+     *  [clear description]
+     *
+     * ----------------------------------------------------------------
+     *  Deletes entire key-value pair from the tree.
+     *
+     */
+     template <typename K, typename D,comparator >
+     BSTree<K,D,comparator>:: void clear()
+     {
+       rootptr=NULL;
+       rootptr=delete;
+     }

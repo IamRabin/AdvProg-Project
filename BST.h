@@ -104,7 +104,7 @@ public:
  *[Copy Function description]
  * Copy Constructor: BSTree(const BSTree& other);
  * Copy Assignment:BSTree& operator= (const BSTree& other);
- * Usage:BSTree<string,i nt>one=two;(Used to create a new object by initalising
+ * Usage:BSTree<string,int>one=two;(Used to create a new object by initalising
  *                                   with the value that currently exists)
  *       one=two;(Used to assign an already existing object to another existing
  *                 object by deep copy.)
@@ -117,14 +117,14 @@ public:
 
 
  /**[Move Semantics Description]
- * Usage:
+ * Usage:BSTree<string,int>one=two
  *-----------------------------------------------------------------------------
  * Move constructor, create a new BST by swapping members.
  * Move assignment, move the members of other onto this.
  *
  * compiler chooses between the copy constructor and the move constructor
- *  based on whether the argument to the assignment operator is an lvalue or
- *  an rvalue.
+ *  based on whether the argument to the assignment operator is an lvalue
+ *  or an rvalue.
  */
     BST (BST<K,V,comp> &&other);
     BST& operator=(BST<K,V,comp> &&other);
@@ -178,8 +178,8 @@ public:
  * Usage:for (myTree<string, int>::iterator itr = i.begin();
  *          itr != i.end(); ++itr) { ... }
  *-----------------------------------------------------------------------------
- * begin() and end () returns iterator to fully traverse the tree.It also acts
- * as a pointer to std::pair<const key,Entry>.
+ * begin() and end () returns iterator to fully traverse the tree.It also
+ * acts as a pointer to std::pair<const key,Entry>.
  */
    constexpr iterator begin();
    constexpr iterator end()
@@ -192,7 +192,8 @@ public:
  *          itr != i.cend(); ++itr) { ... }
  * ----------------------------------------------------------------------------
  * cbegin and cend returns a const_iterator pointing to the first node
- * and past the last node element respectively.It cannot modify the contents.
+ * and past the last node element respectively.It cannot modify the
+ * contents.
  */
    constexpr const_iterator cbegin();
    constexpr const_iterator cend();
