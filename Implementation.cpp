@@ -17,6 +17,19 @@ BSTree<K,D,comparator>::BstNode::BstNode(const K& key, const D& data)
 }
 
 
+/**
+ * [BstNode Destructor]
+ *
+ * ---------------------------------------------------------------------------
+ */
+template <typename K, typename D,comparator >
+BSTree<K,D,comparator>::BstNode::~BstNode() {
+    cout << "~Node@" << this << endl;
+    if (left) delete left;
+    if (right) delete right;
+}
+
+
 
 /**** BSTree Implementation  ****/
 /**
@@ -36,13 +49,14 @@ BSTree<K,D,comparator>::BstNode::BstNode(const K& key, const D& data)
 
 
 /**
- * [BSTree description]
+ * [BSTree Destructor]
  *
  */
   template <typename K, typename D,comparator >
   BSTree<K,D,comparator>:: ~BSTree()
   {
-
+      cout << "Destructor of Tree" << endl;
+       if (rootptr) delete rootptr;
   }
 
 
@@ -57,7 +71,7 @@ BSTree<K,D,comparator>::BstNode::BstNode(const K& key, const D& data)
  *Returns a pointer called newnode that points to a new node.
  */
 template <typename K, typename D,comparator >
-BstTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
+BSTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
 {
     BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
     newNode -> data = data;
@@ -112,3 +126,70 @@ BstNode<K,D,comparator>::iterator,bool find(BstNode* rootptr,D data,K key)
     else return find(root->right, key);
 
 }
+
+template <typename K, typename D,comparator >
+BSTree<K,D,comparator>::iterator
+{
+
+  friend class BSTree;
+  using node = BSTree<K,D,comparator>::BstNode;
+
+private:
+  // pointer to the node currently used by iterator
+  node * current;
+
+
+public:
+  // costructor initialize iterator to node n
+  iterator(node * n) : current{n} {}
+
+  //deference operator, return std::pair<const K,D> of current node
+  std::pair<const K, D,>& operator*() const { return current-> node_data; }
+
+  // forward operator, to move iterator to next node
+  iterator& operator++()
+  {
+    //if current has right child go right
+    if (current -> right != nullptr) {
+      current = current -> right;
+      //now go to the leftmost node adn return it
+      while (current-> left) {
+        current = current->left;
+      }
+      return *this;
+    }
+    //if there aren't right child, go up till there is a right child and return it
+    else {
+      node_data* up = current -> par;
+      while ( up != nullptr && current == up->right) {
+        current = up;
+        up = up->par;
+      }
+      current = up;
+      return *this;
+    }
+
+    // comparison operators
+    bool operator==(const iterator& other) { return (current == other.current);}
+    bool operator!=(const iterator& other) { return (current != other.current);}
+  }
+}
+
+template <typename K, typename D,comparator>
+BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
+{
+  friend class BSTree;
+  using node = BSTree<K,D,comparator>::BstNode;
+  using it = BSTreeBSTree<K,D,comparator>::iterator;
+
+  public:
+    //constructor from  iterator
+    using it::iterator;
+
+    //const dereference from iterator
+    const std::pair<const K, D,>& operator*() const { return it::operator*();}
+
+    //operators from iterator:
+    using it::operator++;
+    using it::operator==;
+    using it::operator!=;

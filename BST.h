@@ -34,7 +34,8 @@
  #include<iterator>     //For iterator,reverse iterator
  #include<memory>      //For managing dynamic memory
  #include<utility>    //For pair
- #include<algorithm> //For comparing,equal,max
+ #include<vector>    //For container functions
+ #include<algorithm>//For comparing,equal,max
  #include<stdexcept>//For out of range situation
 
 
@@ -60,7 +61,8 @@ private:
     K key;  //Key value associated with data
     std::pair<const K, D> node_data // data is stored in node_data
 
-    BstNode(const K& key, const D&);//cosntructor initialises the key/value pair
+    BstNode(const K& key, const D& data);//cosntructor initialises the key-value
+
 
      };
 
@@ -133,7 +135,7 @@ public:
  * -----------------------------------------------------------------------------
  * Usage: BstNode<int,string> mynew_Node;
  */
-    constexpr BstNode* GetNewNode(k key, D data);
+    constexpr BstNode* GetNewNode(const k& key, const  D& data);
 
 
 /**
@@ -253,72 +255,4 @@ public:
                     const BSTree<K, V, comp>&  rhs);
 
 
-
-
-
-
-/* * * * * Implementation Below This Point * * * * */
-
-
-
-
-
-
-
-
-
-
-/* Constructor initialises a new empty tree. */
-
-template <typename K, typename D,comparator >
-BstTree<K,D,comparator>::BSTree(comparator comp):mComp(comp)
-{
-    par=left=right=rootptr=NULL;
-}
-
-
-
-
-
-template <typename K, typename D,comparator >
-BstTree<K,D,comparator>::GetNewNode(D data, K key)
-{
-    BstNode<K,D>* newNode = new BstNode(); // 'new' creates a node in the heap.
-    newNode -> data = data;
-    newNode -> key = key;
-    newNode -> left = newnode -> right = newNode -> par = NULL;
-    return newNode;
-}
-
-
-template <typename K, typename D,comparator >
-BstNode<K,D,comparator>::BstNode<K,D>* insert(BstNode<K,D>* rootptr,D data,K key)
-{
-    if(root=NULL) // In case of empty tree
-    {
-        root=GetNewNode(data,key);//  create a new node and set as root
-        return root;
-    }
-    //if data to be inserted is smaller than data in root, insert in left child.
-    else if (key<=root -> key)
-    {
-        root->left= insert (root->left, data, key);//pass address of left child.
-    }
-    //else, insert in right child.
-    else
-    {
-        root->right=insert(root->right,data,key);
-    }
-    return root; //return type is pointer to BstNode;collects the root address.
-
-}
-
-template <typename K, typename D,comparator >
-BstNode<K,D>::iterator,bool find(BstNode<K,D>* root,D data,K key)
-{
-    if (root==NULL) return ;
-    else if (root->key==key) return true;
-    else if (key <= root->key) return find(root->left,key);
-    else return find(root->right, key);
-
-}
+#endif
