@@ -1,4 +1,5 @@
 
+
 #include "BST.h"
 
 
@@ -18,16 +19,19 @@ BSTree<K,D,comparator>::BstNode::BstNode(const K& key, const D& data)
 
 
 /**
- * [BstNode Destructor]
- *
+ *[BstNode Destructor]
+ *This will destroy the node from the memory when the destructor is called or
+ *the node goes out of scope
  * ---------------------------------------------------------------------------
  */
 template <typename K, typename D,comparator >
 BSTree<K,D,comparator>::BstNode::~BstNode() {
-    cout << "~Node@" << this << endl;
+    std::cout << "~Node@" << this << endl;
     if (left) delete left;
     if (right) delete right;
 }
+
+
 
 
 
@@ -50,7 +54,9 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
 
 /**
  * [BSTree Destructor]
- *
+ *-----------------------------------------------------------------------------
+ *This will destroy the tree from the memory when the destructor is called or
+ *when the tree goes out of scope.
  */
   template <typename K, typename D,comparator >
   BSTree<K,D,comparator>:: ~BSTree()
@@ -58,6 +64,7 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
       cout << "Destructor of Tree" << endl;
        if (rootptr) delete rootptr;
   }
+
 
 
 
@@ -71,7 +78,7 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
  *Returns a pointer called newnode that points to a new node.
  */
 template <typename K, typename D,comparator >
-BSTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
+BstTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
 {
     BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
     newNode -> data = data;
@@ -79,6 +86,9 @@ BSTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
     newNode -> left = newnode -> right = NULL;
     return newNode;
 }
+
+
+
 
 /**
  * [insert description]
@@ -98,34 +108,83 @@ BstNode<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key)
     //if data to be inserted is smaller than data in root, insert in left child.
     else if (key<=root -> key)
     {
-        rootptr->left= insert (rootptr->left, data, key);//pass address of left child.
+       rootptr->left= insert (rootptr->left, data, key);//pass address of left child.
     }
     //else, insert in right child.
     else
     {
         rootptr->right=insert(rootptr->right,data,key);
     }
-    return rootptr; //return type is pointer to BstNode;collects the root address.
+    return rootptr; //returns pointer to BstNode;collects the root address.
 
 }
+
+
+
+
 
 /**
  * [find description]
  *
- * @param  root [description]
- * @param  data [description]
- * @param  key  [description]
- * @return      [description]
+ * @param  const K& key [reference to const K]
+ * ---------------------------------------------------------------------------
+ * This function returns an iterator to the entry in the BSTree.
+ *
+ *
  */
 template <typename K, typename D,comparator >
-BstNode<K,D,comparator>::iterator,bool find(BstNode* rootptr,D data,K key)
+typename BSTree<K,D,comparator>::iterator
+BSTree<K,D,comparator>::find(const K& key)
 {
-    if (root==NULL) return false ;
-    else if (root->key==key) return true;
-    else if (key <= root->key) return find(root->left,key);
-    else return find(root->right, key);
 
 }
+
+
+
+
+
+/**
+ *[FindMin description]
+ * This function finds the smallest key in the tree.
+ * @param  rootptr [It is the pointer to a node]
+ * @return         [returns pointer to the node with min key]
+ * ----------------------------------------------------------------------------
+ */
+template <typename K, typename D,comparator >
+BstNode<K,D,comparator>::BstNode* FindMin(BstNode* rootptr)
+{
+	while(rootptr->left != NULL) rootptr = rootptr->left;
+	return rootptr;
+}
+
+
+
+
+
+/**
+ *[operator[] description]
+ * This square bracket operator overloaded will be implemented interms of
+ * insert().
+ * @param  key [key is the reference to const K type]
+ * -----------------------------------------------------------------------------
+ * This operator overloading function will call insert to get a pair of an
+ * iterator and and a , then look at its second field.
+ */
+template <typename K, typename D,comparator >
+BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
+{
+    iterator itr = find(key);//get the underlying iteratorby calling find
+    if (itr != end())
+    return (*itr).second;
+    insert(node_data{key, D{}});
+    return (*find(key)).second;
+  }
+}
+
+
+
+
+********* Iterator Implementation*********************
 
 template <typename K, typename D,comparator >
 BSTree<K,D,comparator>::iterator
@@ -193,3 +252,5 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
     using it::operator++;
     using it::operator==;
     using it::operator!=;
+
+}

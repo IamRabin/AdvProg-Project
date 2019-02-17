@@ -35,7 +35,7 @@
  #include<memory>      //For managing dynamic memory
  #include<utility>    //For pair
  #include<vector>    //For container functions
- #include<algorithm>//For comparing,equal,max
+ #include<algorithm>//For comparing,equal,max,find
  #include<stdexcept>//For out of range situation
 
 
@@ -62,12 +62,14 @@ private:
     std::pair<const K, D> node_data // data is stored in node_data
 
     BstNode(const K& key, const D& data);//cosntructor initialises the key-value
-
+    ~BstNode();//destructor
 
      };
 
      comparator mComp; //compartor used to compare and store elements.
      BstNode* rootptr;//pointer to root node in BST.
+
+     BstNode* FindMin()//function that returns pointer to min. key in tree
 
      friend class iterator;
      friend class const_iterator;
@@ -80,7 +82,7 @@ public:
  * Constructor: BSTree (comparator comp=comparator());
  * Usage:BSTree<string,int> mytree;
  * Usage:BSTree<string, int>mytree(mycompareFunction)
- * ----------------------------------------------------------------------------
+ * ----------------------------------------------------------------------
  * This constructor constructs a new empty tree and compares key based on the
  * choosen comparison type.
  */
@@ -92,7 +94,7 @@ public:
  *[~BSTree() description]
  * Destructor: ~ BSTree()
  * Usage: Implicit
- * -----------------------------------------------------------------------------
+ * ---------------------------------------------------------------------
  * Destroys the tree by deallocating memory.
  */
    ~BSTree();
@@ -150,12 +152,13 @@ public:
 
 /**
  *[find Description]
- * This function will take the arguments of root node, key and data to be found.
- * This will return true if the key is found and false otherwise.
+ *iterator find(const K& key);
+ * Usage:if (myTree.find("a string") != myTree.end()) {...}
  * -----------------------------------------------------------------------------
- * Usage:
+ * Returns an iterator to the entry in the tree with the specificed key and
+ * ends if it does not exits.
  */
-   constexpr iterator find(BstNode* rootptr, K key, D data);
+   constexpr iterator find(const K& key);
 
 
 
@@ -237,7 +240,7 @@ public:
 
 
 /**
-  *
+  *[Put to operator << description]
   * ---------------------------------------------------------------------------
   * Overload of put to operator <<.It allows to print the key-value pair in
   * chain with order.
@@ -248,6 +251,7 @@ public:
 
 
  /**
+   * [const operator[] description]
    * Comparison operators for BSTree
    */
     template <typename K, typename D,comparator >
