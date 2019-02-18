@@ -111,6 +111,7 @@ BstNode<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key)
        rootptr->left= insert (rootptr->left, data, key);//pass address of left child.
     }
     //else, insert in right child.
+    //**** if key not found, it will insert it in right child? ****
     else
     {
         rootptr->right=insert(rootptr->right,data,key);
@@ -134,9 +135,28 @@ BstNode<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key)
  */
 template <typename K, typename D,comparator >
 typename BSTree<K,D,comparator>::iterator
-BSTree<K,D,comparator>::find(const K& key)
+BSTree<K,D,comparator>::iterator<K,D,comparator>::find(const K& key) const
 {
-
+  BstNode<K,D,comparator> * current{root};
+  while (current)
+  {
+    // when key found return iterator to the node that holds it
+    if (current->key == key)
+    {
+      return iterator{current};
+     }
+    // if the key to be found is smaller than current one, go left
+    else if (current-> key > key)
+    {
+      current = current-> left;
+     }
+     // if the key to be found is greater than current one, go right
+    else
+    {
+      current = current -> right;}
+  }
+  // if the key is not found, return end, that returns an iterator to nullptr
+  return end()
 }
 
 
