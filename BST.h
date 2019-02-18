@@ -115,6 +115,15 @@ public:
    constexpr BSTree (const BSTree& copy);
    constexpr BSTree& operator=(const BSTree& copy);
 
+ /**
+  * [copyHelper description]
+  * @param node [description]
+  * this function is used to copy recursively all the nodes of a tree,
+  * copy constructor and copy assignement make use of it.
+  *
+  */
+   void copyHelper(BstNode * node);
+
 
  /**[Move Semantics Description]
  * Usage:BSTree<string,int>one=two
