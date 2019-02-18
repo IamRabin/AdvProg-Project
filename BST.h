@@ -177,7 +177,7 @@ public:
  *
  * Usage:for (myTree<string, int>::iterator itr = i.begin();
  *          itr != i.end(); ++itr) { ... }
- *-----------------------------------------------------------------------------
+ *-----------------------------------------------------------------------
  * begin() and end () returns iterator to fully traverse the tree.It also
  * acts as a pointer to std::pair<const key,Entry>.
  */
@@ -190,7 +190,7 @@ public:
 /**
  *Usage:for (myTree<string, int>::const_iterator itr = i.cbegin();
  *          itr != i.cend(); ++itr) { ... }
- * ----------------------------------------------------------------------------
+ * ----------------------------------------------------------------------
  * cbegin and cend returns a const_iterator pointing to the first node
  * and past the last node element respectively.It cannot modify the
  * contents.
@@ -200,13 +200,13 @@ public:
 
 
 /**
- * [balance description]
- * Performs balancing of the tree based on the concept of minimum height.
- * Traverses the BST inorder and store  results in a vector which produces
- * sorted sequence.Then a balanced BST is build using the recursive approach.
- * ----------------------------------------------------------------------------
- */
-   void balance();
+* [balance description]
+* Performs balancing of the tree based on the concept of minimum height.
+* Traverses the BST inorder and store  results in a vector which produces
+* sorted sequence.Then a balanced BST is build using the recursive approach.
+* -----------------------------------------------------------------------
+*/
+void balance();
 
 
    /**
