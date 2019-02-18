@@ -30,13 +30,13 @@
  #define __BST_H_INCLUDED__
 
  /*including dependencies */
- #include<iostream>      //For performing input,output
- #include<iterator>     //For iterator,reverse iterator
- #include<memory>      //For managing dynamic memory
- #include<utility>    //For pair
- #include<vector>    //For container functions
- #include<algorithm>//For comparing,equal,max,find
- #include<stdexcept>//For out of range situation
+ #include <iostream>      //For performing input,output
+ #include <iterator>     //For iterator,reverse iterator
+ #include <memory>      //For managing dynamic memory
+ #include <utility>    //For pair
+ #include <vector>    //For container functions
+ #include <algorithm>//For comparing,equal,max,find
+ #include <stdexcept>//For out of range situation
 
 
  /**
@@ -46,7 +46,7 @@
   * contain pointer to parent.It takes any data type as the class is
   * templated.
   */
-template < typename K, typename D, typename comparator=std::less<key> >
+template < typename K, typename D, typename comparator=std::less<K> >
 class BSTree
 {
 private:
@@ -59,17 +59,18 @@ private:
 
     D data;  // Data
     K key;  //Key value associated with data
-    std::pair<const K, D> node_data // data is stored in node_data
 
     BstNode(const K& key, const D& data);//cosntructor initialises the key-value
     ~BstNode();//destructor
 
      };
 
+     using node_data = std::pair<const K, D>;// data is stored in node_data
+
      comparator mComp; //compartor used to compare and store elements.
      BstNode* rootptr;//pointer to root node in BST.
 
-     BstNode* FindMin()//function that returns pointer to min. key in tree
+     BstNode* FindMin();//function that returns pointer to min. key in tree
 
      friend class iterator;
      friend class const_iterator;
@@ -135,8 +136,8 @@ public:
  *  based on whether the argument to the assignment operator is an lvalue
  *  or an rvalue.
  */
-    BST (BST<K,V,comp> &&other);
-    BST& operator=(BST<K,V,comp> &&other);
+    BSTree (BSTree<K,D,comparator> &&other);
+    BSTree& operator=(BSTree<K,D,comparator> &&other);
 
 
 /**
@@ -146,7 +147,7 @@ public:
  * -----------------------------------------------------------------------------
  * Usage: BstNode<int,string> mynew_Node;
  */
-    constexpr BstNode* GetNewNode(const k& key, const  D& data);
+    constexpr BstNode* GetNewNode(const K& key, const  D& data);
 
 
 /**
@@ -159,15 +160,7 @@ public:
     constexpr BstNode* insert(BstNode* rootptr, K& key,D& data);
 
 
-/**
- *[find Description]
- *iterator find(const K& key);
- * Usage:if (myTree.find("a string") != myTree.end()) {...}
- * -----------------------------------------------------------------------------
- * Returns an iterator to the entry in the tree with the specificed key and
- * ends if it does not exits.
- */
-   constexpr iterator find(const K& key);
+
 
 
 
@@ -190,11 +183,10 @@ public:
  * begin() and end () returns iterator to fully traverse the tree.It also
  * acts as a pointer to std::pair<const key,Entry>.
  */
-   constexpr iterator begin();
-   constexpr iterator end()
-   constexpr const_iterator begin();
-   constexpr const_iterator end();
-
+    constexpr iterator begin();
+    constexpr iterator end();
+    constexpr const_iterator begin() const;
+    constexpr const_iterator end() const;
 
 /**
  *Usage:for (myTree<string, int>::const_iterator itr = i.cbegin();
@@ -204,18 +196,33 @@ public:
  * and past the last node element respectively.It cannot modify the
  * contents.
  */
-   constexpr const_iterator cbegin();
-   constexpr const_iterator cend();
+   constexpr const_iterator cbegin() const;
+   constexpr const_iterator cend() const;
 
+   /**
+    *[find Description]
+    *iterator find(const K& key);
+    * Usage:if (myTree.find("a string") != myTree.end()) {...}
+    * -----------------------------------------------------------------------------
+    * Returns an iterator to the entry in the tree with the specificed key and
+    * ends if it does not exits.
+    */
+
+    constexpr iterator find(const K& key);
 
 /**
 * [balance description]
 * Performs balancing of the tree based on the concept of minimum height.
 * Traverses the BST inorder and store  results in a vector which produces
 * sorted sequence.Then a balanced BST is build using the recursive approach.
-* -----------------------------------------------------------------------
+* storeBstNodes function stores all the nodes of the tree in a std::vector
+* rebuildTree retrieve nodes from storeBstNodes and rebuild the tree balanced.
+** -----------------------------------------------------------------------
 */
+void storeBstNodes(BstNode* rootptr, std::vector<node_data>& N);
+BstNode* rebuildTree(std::vector<node_data>& N, int start, int end);
 void balance();
+
 
 
    /**
@@ -255,18 +262,18 @@ void balance();
   * Overload of put to operator <<.It allows to print the key-value pair in
   * chain with order.
   */
-    std::ostream& operator<<(std::ostream& os, const BST<K,D,comp>& mytree)
+    friend std::ostream& operator<<(std::ostream& os, const BSTree<K,D,comparator>& mytree);
 
-};
+
 
 
  /**
    * [const operator[] description]
    * Comparison operators for BSTree
    */
-    template <typename K, typename D,comparator >
-    bool operator==(const BSTree<K, V, comp>& lhs,
-                    const BSTree<K, V, comp>&  rhs);
-
+    template <K, D, comparator >
+    bool operator==(const BSTree<K, D, comparator>& lhs,
+                    const BSTree<K, D, comparator>&  rhs);
+};
 
 #endif
