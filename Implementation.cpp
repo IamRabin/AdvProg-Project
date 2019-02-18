@@ -244,8 +244,14 @@ BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
 
 
 
-//********* Iterator Implementation*********************
-
+/**
+ * [iterator description]
+ * @param n [description]
+ *
+ * Iterator class used to travel the tree using relative positions pointers:
+ * parent, left, right.
+ * It moves only forward, implemented with the operator++ overload.
+ */
 template <typename K, typename D,comparator >
 BSTree<K,D,comparator>::iterator
 {
