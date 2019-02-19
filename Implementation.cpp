@@ -47,7 +47,7 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
   template <typename K, typename D,typename comparator >
   BSTree<K,D,comparator>::BSTree(comparator comp):mcomp(comp)
     {
-        par=left=right=rootptr=NULL;
+        rootptr=NULL;
      }
 
 
@@ -80,7 +80,7 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
 template <typename K, typename D,typename comparator >
 BstTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
 {
-    BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
+    std::unique_ptr<BstNode> newNode(new BstNode())
     newNode -> data = data;
     newNode -> key = key;
     newNode -> left = newnode -> right = NULL;
@@ -98,29 +98,44 @@ BstTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
  * @param key     [description]
  */
 template <typename K, typename D,typename comparator >
-BstNode<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key)
+typename BstNode<K,D,comparator>:: BstNode* BstNode<K,D,comparator>::
+                    insert_helper(BstNode* rootptr,const K& key,const D& data)
 {
-    if(rootptr=NULL) // In case of empty tree
+    if(rootptr=NULL) // In case of empty tree, create new node
     {
-        rootptr=GetNewNode(data,key);//  create a new node and set as root
-        return root;
+        rootptr=GetNewNode(const K& key,const D& data);
+        return rootptr;
     }
     //if data to be inserted is smaller than data in root, insert in left child.
-    else if (key<=root -> key)
+    else if (key<=rootptr -> key())
     {
-       rootptr->left= insert (rootptr->left, data, key);//pass address of l.child.
+       rootptr->left()= insert_helper (rootptr->left(), key,data);//pass address of l.child.
     }
     //else, insert in right child.
-    //**** if key not found, it will insert it in right child? ****
     else
     {
-        rootptr->right=insert(rootptr->right,data,key);
+        rootptr->right()=insert_helper(rootptr->right(),key,data);
     }
-    return rootptr; //returns pointer to BstNode;collects the root address.
+    return rootptr; //returns tree with nodes inserted
 
 }
 
+/**
+ * [insert description]
+ *
+ * @param key  [key of the entry]
+ * @param data [value of the entry]
+ *-----------------------------------------------------------------------------
+ * Insert a record into the tree. K Key value of the record.
+ * D data to be inserted.
+ */
 
+template <typename K, typename D,typename comparator >
+BstNode<K,D,comparator>::void insert(const K& key, const D& data)
+ {
+    rootptr = inserthelper(rootptr, key, data);
+    nodecount++;
+ }
 
 
 
@@ -171,10 +186,10 @@ BSTree<K,D,comparator>::iterator<K,D,comparator>::find(const K& key) const
  * ----------------------------------------------------------------------------
  */
     template <typename K, typename D,typename comparator >
-    BstNode<K,D,comparator>::BstNode* FindMin(BstNode* rootptr)
+    BstNode<K,D,comparator>::FindMin () const
     {
     	while(rootptr->left != NULL) rootptr = rootptr->left;
-    	return rootptr;
+    	return iterator{rootptr};
     }
 
 
@@ -438,13 +453,12 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
     * chain with order.
     */
       template <typename K, typename D,typename  comparator >
-      BSTree<K,D,comparator>::
-      std::ostream& operator<<(std::ostream& os, const BST<K,D,comp>& mytree)
+      std::ostream& operator << (std::ostream& os, BSTree& mytree)
       {
 
        for (const auto& x : mytree)
 
-         { os << x.first << ": " << x.second << std::endl;}
+         { os << x.first << " : " << x.second << std::endl;}
 
        return os;
 
@@ -484,8 +498,7 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
 
 
 
-
-           /**** Balance function Implementation ****/
+   /********* Balance function Implementation **********/
 
 
      //Construct Binary Tree recursively
@@ -533,9 +546,3 @@ BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::iterator
           rebuildTree(N, 0, N.size()- 1);
 
        }
-
-
-
-
-
-  

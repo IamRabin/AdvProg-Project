@@ -59,6 +59,7 @@ private:
 
     D data;  // Data
     K key;  //Key value associated with data
+    int nodecount; //counting number of nodes in the BST
     std::pair<const K, D> node_data // data is stored in node_data
 
     BstNode(const K& key, const D& data);//cosntructor initialises the key-value
@@ -115,6 +116,15 @@ public:
    constexpr BSTree (const BSTree& copy);
    constexpr BSTree& operator=(const BSTree& copy);
 
+ /**
+  * [copyHelper description]
+  * @param node [description]
+  * this function is used to copy recursively all the nodes of a tree,
+  * copy constructor and copy assignement make use of it.
+  *
+  */
+   void copyHelper(BstNode * node);
+
 
  /**[Move Semantics Description]
  * Usage:BSTree<string,int>one=two
@@ -142,12 +152,15 @@ public:
 
 /**
  *[Insert Description]
- * This function will allow to insert key and value in the tree.
+ * This function will allow to insert key and value in the tree with the use of
+ * insert helper function
  *------------------------------------------------------------------------------
  *Usage:insert(BstNode* root,D data,K key)
  *Usage: mytree.insert(root,"A string", 15);
  */
-    constexpr BstNode* insert(BstNode* rootptr, K& key,D& data);
+ BstNode* inserthelper(BstNode* rootptr, const K& key,D& const data);
+ void insert(const K& key, const D& data)
+
 
 
 /**
@@ -209,12 +222,12 @@ public:
 void balance();
 
 
-   /**
-    * [clear description]
-    * -------------------------------------------------------------------------
-    * Deletes entire key-value pair from the tree.
-    */
-     void clear();
+/**
+* [clear description]
+* -------------------------------------------------------------------------
+* Deletes entire key-value pair from the tree.
+*/
+ void clear();
 
 
 /**
@@ -246,7 +259,8 @@ void balance();
   * Overload of put to operator <<.It allows to print the key-value pair in
   * chain with order.
   */
-    std::ostream& operator<<(std::ostream& os, const BST<K,D,comp>& mytree)
+    std::ostream& operator << (std::ostream& os,
+                              const BST<K,D,comparator>& mytree)
 
 };
 
