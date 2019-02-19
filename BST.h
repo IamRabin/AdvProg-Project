@@ -60,6 +60,8 @@ private:
     D data;  // Data
     K key;  //Key value associated with data
 
+    //int nodecount; //counting number of nodes in the BST
+    BstNode(); //default constructor
     BstNode(const K& key, const D& data);//cosntructor initialises the key-value
     ~BstNode();//destructor
 
@@ -70,7 +72,7 @@ private:
      comparator mComp; //compartor used to compare and store elements.
      BstNode* rootptr;//pointer to root node in BST.
 
-     BstNode* FindMin();//function that returns pointer to min. key in tree
+     BstNode* FindMin() const;//function that returns pointer to min. key in tree
 
      friend class iterator;
      friend class const_iterator;
@@ -113,8 +115,8 @@ public:
  *  Both the overloaded assignmnet operator and the copy constructor performs
  *  deep copy. Overloaded assignment only invoked if the object already exists.
  */
-   constexpr BSTree (const BSTree& copy);
-   constexpr BSTree& operator=(const BSTree& copy);
+   BSTree (const BSTree& copy);
+   BSTree& operator=(const BSTree& copy);
 
  /**
   * [copyHelper description]
@@ -147,25 +149,36 @@ public:
  * -----------------------------------------------------------------------------
  * Usage: BstNode<int,string> mynew_Node;
  */
-    constexpr BstNode* GetNewNode(const K& key, const  D& data);
+    BstNode* GetNewNode(const K& key, const  D& data);
 
 
 /**
- *[Insert Description]
+ *[insert_helper Description]
  * This function will allow to insert key and value in the tree.
  *------------------------------------------------------------------------------
  *Usage:insert(BstNode* root,D data,K key)
  *Usage: mytree.insert(root,"A string", 15);
  */
-    constexpr BstNode* insert(BstNode* rootptr, K& key,D& data);
+    BstNode* insert_helper(BstNode* rootptr, const K& key, const D& data);
 
+
+/**
+* [insert description]
+* @param key  [key of the entry]
+* @param data [value of the entry]
+* ----------------------------------------------------------------------------
+* Insert a record into the tree. K Key value of the record.
+* D data to be inserted.
+ */
+    void insert(const K& key, const D& data);
 
 
 
 
 
   /**
-   *[const_iterator description]
+   *[const_
+   * description]
    * Type:iterator
    * Type: const_iterator
    * ---------------------------------------------------------------------------
@@ -183,10 +196,10 @@ public:
  * begin() and end () returns iterator to fully traverse the tree.It also
  * acts as a pointer to std::pair<const key,Entry>.
  */
-    constexpr iterator begin();
-    constexpr iterator end();
-    constexpr const_iterator begin() const;
-    constexpr const_iterator end() const;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
 
 /**
  *Usage:for (myTree<string, int>::const_iterator itr = i.cbegin();
@@ -196,8 +209,8 @@ public:
  * and past the last node element respectively.It cannot modify the
  * contents.
  */
-   constexpr const_iterator cbegin() const;
-   constexpr const_iterator cend() const;
+   const_iterator cbegin() const;
+   const_iterator cend() const;
 
    /**
     *[find Description]
@@ -208,7 +221,7 @@ public:
     * ends if it does not exits.
     */
 
-    constexpr iterator find(const K& key);
+    iterator find(const K& key) const;
 
 /**
 * [balance description]
@@ -241,7 +254,7 @@ void balance();
  *  Incase the key is not in the tree, it gets inserted into the tree with
  *  default constructor and its data.
  */
-   constexpr D& operator[] (const K& key );
+   D& operator[] (const K& key );
 
 
 /**
@@ -262,7 +275,16 @@ void balance();
   * Overload of put to operator <<.It allows to print the key-value pair in
   * chain with order.
   */
-    friend std::ostream& operator<<(std::ostream& os, const BSTree<K,D,comparator>& mytree);
+    friend std::ostream& operator<<(std::ostream& os, const BSTree& mytree)
+    {
+
+     for (const auto& x : mytree)
+
+       { os << x.first << ": " << x.second << std::endl;}
+
+     return os;
+
+   };
 
 
 
@@ -270,10 +292,11 @@ void balance();
  /**
    * [const operator[] description]
    * Comparison operators for BSTree
-   */
+
     template <K, D, comparator >
     bool operator==(const BSTree<K, D, comparator>& lhs,
                     const BSTree<K, D, comparator>&  rhs);
+    */
 };
 
 #endif

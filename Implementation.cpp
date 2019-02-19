@@ -10,6 +10,10 @@
  * empty node.
  *-----------------------------------------------------------------------------
  */
+ template <typename K, typename D,typename comparator >
+ BSTree<K,D,comparator>::BstNode::BstNode() {}
+
+
 template <typename K, typename D,typename comparator >
 BSTree<K,D,comparator>::BstNode::BstNode(const K& key, const D& data)
 : node_data(key,data)
@@ -78,12 +82,13 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {
  *Returns a pointer called newnode that points to a new node.
  */
 template <typename K, typename D,typename comparator >
-typename BSTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data)
+typename BSTree<K,D,comparator>::BstNode* BSTree<K,D,comparator>::
+GetNewNode(const K& key, const D& data)
 {
     BstNode* newNode = new BstNode(); // 'new' creates a node in the heap.
     newNode -> data = data;
     newNode -> key = key;
-    newNode -> left = newnode -> right = NULL;
+    newNode -> left = newNode -> right = NULL;
     return newNode;
 }
 
@@ -91,33 +96,50 @@ typename BSTree<K,D,comparator>::BstNode* GetNewNode(const K& key, const D& data
 
 
 /**
- * [insert description]
+ * [insert_helper description]
  *
  * @param rootptr [description]
  * @param data    [description]
  * @param key     [description]
  */
 template <typename K, typename D,typename comparator >
-BSTree<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key>)
+typename BSTree<K,D,comparator>::BstNode* BSTree<K,D,comparator>::
+insert_helper(BstNode* rootptr,const K& key, const D& data)
 {
     if(rootptr=NULL) // In case of empty tree
     {
-        rootptr=GetNewNode(data,key);//  create a new node and set as root
-        return root;
+        rootptr = GetNewNode(key, data);//  create a new node and set as root
+        return rootptr;
     }
     //if data to be inserted is smaller than data in root, insert in left child.
-    else if (key<=root -> key)
+    else if (key<=rootptr -> key)
     {
-       rootptr->left= insert (rootptr->left, data, key);//pass address of l.child.
+       rootptr->left=insert_helper(rootptr->left, data, key);//pass address of l.child.
     }
     //else, insert in right child.
     //**** if key not found, it will insert it in right child? ****
     else
     {
-        rootptr->right=insert(rootptr->right,data,key);
+        rootptr->right=insert_helper(rootptr->right,data,key);
     }
     return rootptr; //returns pointer to BstNode;collects the root address.
 
+}
+
+
+/**
+ * [insert description]
+ * @param key  [key of the entry]
+ * @param data [value of the entry]
+ * ----------------------------------------------------------------------------
+ * Insert a record into the tree. K Key value of the record.
+ * D data to be inserted.
+ */
+template <typename K, typename D,typename comparator >
+void BSTree<K,D,comparator>::insert(const K& key, const D& data)
+{
+  rootptr = insert_helper(rootptr, key, data);
+  //nodecount ++;
 }
 
 
@@ -133,9 +155,9 @@ BSTree<K,D,comparator>::BstNode* insert(BstNode<* rootptr,D data,K key>)
  *
  *
  */
-template <typename K, typename D,typename comparator >
-typename BSTree<K,D,comparator>::iterator
-BSTree<K,D,comparator>::find(const K& key) const
+ template <typename K, typename D, typename comparator >
+ typename BSTree<K,D,comparator>::iterator
+ BSTree<K,D,comparator>::find(const K& key) const
 {
   BstNode * current{rootptr};
   while (current)
@@ -156,7 +178,7 @@ BSTree<K,D,comparator>::find(const K& key) const
       current = current -> right;}
   }
   // if the key is not found, return end, that returns an iterator to nullptr
-  return end()
+  return end();
 }
 
 
@@ -171,7 +193,8 @@ BSTree<K,D,comparator>::find(const K& key) const
  * ----------------------------------------------------------------------------
  */
     template <typename K, typename D,typename comparator >
-    typename BstNode<K,D,comparator>::BstNode*  BstNode<K,D,comparator>::FindMin(BstNode* rootptr)
+    typename BSTree<K,D,comparator>::BstNode*
+    BSTree<K,D,comparator>::FindMin() const
     {
     	while(rootptr->left != NULL)
       { rootptr = rootptr->left; }
@@ -186,11 +209,13 @@ BSTree<K,D,comparator>::find(const K& key) const
  */
 
     template <typename K, typename D, typename comparator >
-    typename BSTree<K,D,comparator>::iterator begin()
+    typename BSTree<K,D,comparator>::iterator
+    BSTree<K,D,comparator>::begin()
     { return iterator{FindMin()}; }
 
     template <typename K, typename D, typename comparator >
-    typename BSTree<K,D,comparator>::iterator end()
+    typename BSTree<K,D,comparator>::iterator
+    BSTree<K,D,comparator>::end()
     { return iterator{nullptr}; }
 
 
@@ -199,11 +224,13 @@ BSTree<K,D,comparator>::find(const K& key) const
  */
 
 template <typename K, typename D,  typename comparator >
-typename BSTree<K,D,comparator>::const_iterator begin() const
+typename BSTree<K,D,comparator>::const_iterator
+BSTree<K,D,comparator>::begin() const
 { return const_iterator{FindMin()}; }
 
 template <typename K, typename D,  typename comparator >
-typename BSTree<K,D,comparator>::const_iterator end() const
+typename BSTree<K,D,comparator>::const_iterator
+BSTree<K,D,comparator>::end() const
 { return const_iterator{nullptr}; }
 
 
@@ -214,12 +241,14 @@ typename BSTree<K,D,comparator>::const_iterator end() const
  */
 
 template <typename K, typename D,  typename comparator >
-typename BSTree<K,D,comparator>::const_iterator cbegin() const
-const { return const_iterator{FindMin()}; }
+typename BSTree<K,D,comparator>::const_iterator
+BSTree<K,D,comparator>::cbegin() const
+{ return const_iterator{FindMin()}; }
 
 template <typename K, typename D,  typename comparator >
-typename BSTree<K,D,comparator>::const_iterator cend() const
-const { return const_iterator{nullptr}; }
+typename BSTree<K,D,comparator>::const_iterator
+BSTree<K,D,comparator>::cend() const
+{ return const_iterator{nullptr}; }
 
 
 
@@ -240,7 +269,7 @@ const { return const_iterator{nullptr}; }
  * iterator and a value , then look at its second field.
  */
 template <typename K, typename D,typename comparator >
-BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
+D& BSTree<K,D,comparator>::operator[] (const K& key )
 {
     iterator itr = find(key);//get the underlying iterator by calling find
     if (itr != end()){
@@ -263,12 +292,11 @@ BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
  * exception.
  */
  template <typename K, typename D,typename comparator >
- BSTree<K,D,comparator>::
- constexpr const D& operator[] (const K& key) const
+ constexpr const D& BSTree<K,D,comparator>::operator[] (const K& key) const
  {
     const_iterator itr = find(key);
-    if (iter != end()) {
-        return iter -> second;
+    if (itr != end()) {
+        return itr -> second;
     }
     throw std::out_of_range{" key not found in the tree"};
 }
@@ -284,7 +312,7 @@ BstNode<K,D,comparator>::constexpr D& operator[] (const K& key )
  * parent, left, right.
  * It moves only forward, implemented with the operator++ overload.
  */
-template <typename K, typename D,comparator >
+template <typename K, typename D,typename comparator>
 class BSTree<K,D,comparator>::iterator
 {
 
@@ -301,7 +329,7 @@ public:
   iterator(node * n) : current{n} {}
 
   //deference operator, return std::pair<const K,D> of current node
-  std::pair<const K, D,>& operator*() const { return current-> node_data; }
+  std::pair<const K, D>& operator*() const { return current-> node_data; }
 
   // forward operator, to move iterator to next node
   iterator& operator++()
@@ -329,12 +357,13 @@ public:
       current = up;
       return *this;
     }
+  }
 
     // comparison operators
     bool operator==(const iterator& other) { return (current == other.current);}
     bool operator!=(const iterator& other) { return (current != other.current);}
-  }
-};
+  };
+
 
 
 template <typename K, typename D,typename comparator>
@@ -342,14 +371,14 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
 {
   friend class BSTree;
   using node = BSTree<K,D,comparator>::BstNode;
-  using it = BSTree<K,D,comparator>iterator;
+  using it = BSTree<K,D,comparator>::iterator;
 
   public:
     //constructor from  iterator
     using it::iterator;
 
     //const dereference from iterator
-    const std::pair<const K, D,>& operator*() const { return it::operator*();}
+    const std::pair<const K, D>& operator*() const { return it::operator*();}
 
     //operators from iterator:
     using it::operator++;
@@ -360,36 +389,39 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
 
 
 
-  //copyHelper function, copy node and than recursively child nodes
-  template <typename K, typename D,comparator>
-  void BSTree<K,D,comparator>::copyHelper(BstNode * nodeptr)
+
+
+//copyHelper function, copy node and than recursively child nodes
+template <typename K, typename D,typename comparator>
+void BSTree<K,D,comparator>::copyHelper(BstNode * nodeptr)
+{
+  if (nodeptr)
   {
-    if (nodeptr)
-    {
-      insert(nodeptr->data);
-      copyHelper(nodeptr->left);
-      copyHelper(nodeptr->right);
-    }
+    insert(nodeptr->data);
+    copyHelper(nodeptr->left);
+    copyHelper(nodeptr->right);
   }
-
-
+}
 
   //copy Constructor, use copyHelper
-  template <typename K, typename D,comparator>
-  constexpr BSTree<K,D,comparator>::BSTree(const BSTree& copy)
+  template <typename K, typename D,typename comparator>
+  BSTree<K,D,comparator>::BSTree(const BSTree& copy)
   {
     rootptr=nullptr;
     copyHelper(copy.rootptr);
   }
 
   //copy assignment, use copyHelper to copy all members from one tree to the other
-  template <typename K, typename D,comparator>
-  constexpr BSTree<K,D,comparator>::BSTree& operator=(const BSTree& copy)
+  template <typename K, typename D,typename comparator>
+  BSTree<K,D,comparator>& BSTree<K,D,comparator>::operator=(const BSTree& copy)
   {
     clear();
     copyHelper(copy.rootptr); //call helper to perform copy
     return *this;
   }
+
+
+
 
 
 /**
@@ -401,7 +433,7 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
  */
 
     template <typename K, typename D,typename comparator >
-    BSTree<K,D,comparator>:: BST (BST<K,V,comp> &&other):
+    BSTree<K,D,comparator>:: BSTree(BSTree<K,D,comparator> &&other):
     rootptr{ std::move(other.rootptr) }
     {std::cout << "Last tree constructed with move-constructor." << std::endl;}
 
@@ -417,46 +449,25 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
  */
 
     template <typename K, typename D,typename comparator >
-    BSTree<K,D,comparator>:: BST& operator=(BST<K,V,comp> &&other)
+     BSTree<K,D,comparator>& BSTree<K,D,comparator>::
+     operator=(BSTree<K,D,comparator> &&other)
     {
       // if the tree at the left hand side of the assignment isn't empty,
       // it's cleared. Existing nodes are deleted.
-     if (!is_empty())
+     if (rootptr != NULL)
       {
-        cout << "Clearing out previous content at left hand side..." << endl;
+        std::cout << "Clearing out previous content at left hand side..." << std::endl;
         rootptr = NULL;
       }
       // if the other tree isn't empty, its root is moved.
-     if (!other.is_empty())
+     if (other != NULL)
       {
-        cout << "Moving root to the left-side." << endl;
+        std::cout << "Moving root to the left-side." << std::endl;
         rootptr = std::move(other.rootptr);
       }
 
      return *this;
      }
-
-
-
-  /**
-    *[Put to operator << description]
-    *@param const BST<K,D,comp>& mytree [reference to the constant class type]
-    * -----------------------------------------------------------------------
-    * Overload of put to operator <<.It allows to print the key-value pair in
-    * chain with order.
-    */
-      template <typename K, typename D,typename  comparator >
-      std::ostream& operator<<(std::ostream& os, const BSTree<K,D,comparator>& mytree)
-      {
-
-       for (const auto& x : mytree)
-
-         { os << x.first << ": " << x.second << std::endl;}
-
-       return os;
-
-       }
-
 
 
     /**
@@ -467,41 +478,12 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
      *
      */
      template <typename K, typename D, typename comparator >
-     BSTree<K,D,comparator>:: void clear()
+     void BSTree<K,D,comparator>::clear()
      {
        rootptr=NULL;
-       rootptr=delete;
+       delete rootptr;
      }
-  //copyHelper function, copy node and than recursively child nodes
-  template <typename K, typename D,comparator>
-  void BSTree<K,D,comparator>::copyHelper(BstNode * nodeptr)
-  {
-    if (nodeptr)
-    {
-      insert(nodeptr->data);
-      copyHelper(nodeptr->left);
-      copyHelper(nodeptr->right);
-    }
-  }
 
-
-
-  //copy Constructor, use copyHelper
-  template <typename K, typename D,comparator>
-  constexpr BSTree<K,D,comparator>::BSTree(const BSTree& copy)
-  {
-    rootptr=nullptr;
-    copyHelper(copy.rootptr);
-  }
-
-  //copy assignment, use copyHelper to copy all members from one tree to the other
-  template <typename K, typename D,comparator>
-  constexpr BSTree<K,D,comparator>::BSTree& operator=(const BSTree& copy)
-  {
-    clear();
-    copyHelper(copy.rootptr); //call helper to perform copy
-    return *this;
-  }
 
 
 
@@ -509,7 +491,7 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
      //creates a left unbalanced tree
 
      template <typename K, typename D, typename comparator >
-     void BSTree<K,D,comparator>::void storeBstNodes(BstNode* rootptr,
+     void BSTree<K,D,comparator>::storeBstNodes(BstNode* rootptr,
                                                    std::vector<node_data>& N)
      {
          if (rootptr==NULL)
@@ -517,7 +499,7 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
 
          storeBstNodes(rootptr->left,N);
          N.push_back(rootptr);
-         storeBstNodes(rootptr->right,N)
+         storeBstNodes(rootptr->right,N);
      }
 
 
@@ -528,7 +510,9 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
 
      //Construct Binary Tree recursively
      template <typename K, typename D, typename comparator >
-     BSTree<K,D,comparator>::BstNode*rebuildTree(std::vector<node_data>& N,int start,int end)
+     typename BSTree<K,D,comparator>::BstNode*
+     BSTree<K,D,comparator>::
+     rebuildTree(std::vector<node_data>& N,int start,int end)
      {
 
 
@@ -536,7 +520,7 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
          return NULL;
 
         /* Making the middle data element the root.*/
-        int mid=(start+end)/2
+        int mid=(start+end)/2;
         BstNode*rootptr=N[mid];
 
         //insert(N[mid])
@@ -553,18 +537,18 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
       template <typename K, typename D,typename comparator >
       void BSTree<K,D,comparator>::balance()
       {
-         Iterator it{this->begin()};
-         Iterator end{this->end()};
+         iterator it{this->begin()};
+         iterator end{this->end()};
          std::vector<node_data> N;
 
-         if(start==end)
+         if(it==end)
          {
              return;
          }
 
          for (;it != end; ++it)
          {
-      	     pairs.push_back(*it);
+      	     N.push_back(*it);
          }
 
           clear();
