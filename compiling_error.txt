@@ -1,0 +1,15 @@
+In file included from /home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Main.cpp:1:0:
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp: In instantiation of ‘BSTree<K, D, comparator>::BstNode* BSTree<K, D, comparator>::FindMin() const [with K = int; D = int; comparator = std::less<int>]’:
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp:229:32:   required from ‘BSTree<K, D, comparator>::const_iterator BSTree<K, D, comparator>::begin() const [with K = int; D = int; comparator = std::less<int>]’
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/BST.h:281:6:   required from ‘std::ostream& operator<<(std::ostream&, const BSTree<int, int>&)’
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Main.cpp:16:22:   required from here
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp:200:17: error: assignment of member ‘BSTree<int, int>::rootptr’ in read-only object
+       { rootptr = rootptr->left; }
+         ~~~~~~~~^~~~~~~~~~~~~~~
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp: In instantiation of ‘std::pair<const K, D>& BSTree<K, D, comparator>::iterator::operator*() const [with K = int; D = int; comparator = std::less<int>]’:
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp:381:74:   required from ‘const std::pair<const K, D>& BSTree<K, D, comparator>::const_iterator::operator*() const [with K = int; D = int; comparator = std::less<int>]’
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/BST.h:281:6:   required from ‘std::ostream& operator<<(std::ostream&, const BSTree<int, int>&)’
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Main.cpp:16:22:   required from here
+/home/brobribro/Desktop/DSSC/FirstSemester/AP_Project/Implementation.cpp:332:63: error: ‘using node = struct BSTree<int, int>::BstNode {aka struct BSTree<int, int>::BstNode}’ has no member named ‘node_data’
+   std::pair<const K, D>& operator*() const { return current-> node_data; }
+                                                     ~~~~~~~~~~^~~~~~~~~
