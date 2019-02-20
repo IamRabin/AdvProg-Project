@@ -50,15 +50,19 @@ template < typename K, typename D, typename comparator=std::less<K> >
 class BSTree
 {
 private:
+    struct BstNode;
+    typedef std::unique_ptr<BstNode> upTreeNode;
     struct BstNode
     {
 
-    BstNode* left;   //left child
-    BstNode* right; // right child
+    K key;    //Key value associated with data
+    D data;   // Data
+    upTreeNode left;   //left child
+    upTreeNode right; // right child
     BstNode* par;  //parent
 
-    D data;  // Data
-    K key;  //Key value associated with data
+
+
 
     //int nodecount; //counting number of nodes in the BST
     BstNode(); //default constructor
@@ -67,10 +71,10 @@ private:
 
      };
 
-     using node_data = std::pair<const K, D>;// data is stored in node_data
+     using node_data = std::pair<K, D>;// data is stored in node_data
 
      comparator mComp; //compartor used to compare and store elements.
-     BstNode* rootptr;//pointer to root node in BST.
+     upTreeNode rootptr;//pointer to root node in BST.
 
      BstNode* FindMin() const;//function that returns pointer to min. key in tree
 
@@ -125,7 +129,7 @@ public:
   * copy constructor and copy assignement make use of it.
   *
   */
-   void copyHelper(BstNode * node);
+   void copyHelper(const std::unique_ptr<BstNode> nodeptr);
 
 
  /**[Move Semantics Description]
@@ -143,26 +147,6 @@ public:
 
 
 /**
- *[GetNewNode Description]
- * This function will create a new node in the heap.It takes key and value
- * (data) as an input.
- * -----------------------------------------------------------------------------
- * Usage: BstNode<int,string> mynew_Node;
- */
-    BstNode* GetNewNode(const K& key, const  D& data);
-
-
-/**
- *[insert_helper Description]
- * This function will allow to insert key and value in the tree.
- *------------------------------------------------------------------------------
- *Usage:insert(BstNode* root,D data,K key)
- *Usage: mytree.insert(root,"A string", 15);
- */
-    BstNode* insert_helper(BstNode* rootptr, const K& key, const D& data);
-
-
-/**
 * [insert description]
 * @param key  [key of the entry]
 * @param data [value of the entry]
@@ -171,6 +155,8 @@ public:
 * D data to be inserted.
  */
     void insert(const K& key, const D& data);
+    void print() const;
+    void print(const upTreeNode&) const;
 
 
 
