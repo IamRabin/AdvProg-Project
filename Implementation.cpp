@@ -83,13 +83,12 @@ template <typename K, typename D,typename comparator >
 typename BSTree<K,D,comparator>::BstNode* BSTree<K,D,comparator>::
 GetNewNode(const K& key, const D& data)
 {
-    std::unique_ptr<BstNode> newNode(new BstNode())
+    BstNode* newNode=new BstNode();
     newNode -> data = data;
     newNode -> key = key;
     newNode -> left = newNode -> right = NULL;
     return newNode;
 }
-
 
 
 
@@ -101,25 +100,11 @@ GetNewNode(const K& key, const D& data)
  * @param key     [key of an entry]
  */
 template <typename K, typename D,typename comparator >
-<<<<<<< HEAD
-typename BstNode<K,D,comparator>:: BstNode* BstNode<K,D,comparator>::
-                    insert_helper(BstNode* rootptr,const K& key,const D& data)
-=======
 typename BSTree<K,D,comparator>::BstNode* BSTree<K,D,comparator>::
 insert_helper(BstNode* rootptr,const K& key, const D& data)
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 {
     if(rootptr=NULL) // In case of empty tree, create new node
     {
-<<<<<<< HEAD
-        rootptr=GetNewNode(const K& key,const D& data);
-        return rootptr;
-    }
-    //if data to be inserted is smaller than data in root, insert in left child.
-    else if (key<=rootptr -> key())
-    {
-       rootptr->left()= insert_helper (rootptr->left(),key,data);//pass address of l.child.
-=======
         rootptr = GetNewNode(key, data);//  create a new node and set as root
         return rootptr;
     }
@@ -127,16 +112,11 @@ insert_helper(BstNode* rootptr,const K& key, const D& data)
     else if (key<=rootptr -> key)
     {
        rootptr->left=insert_helper(rootptr->left, data, key);//pass address of l.child.
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
     }
     //else, insert in right child.
     else
     {
-<<<<<<< HEAD
-        rootptr->right()=insert_helper(rootptr->right(),key,data);
-=======
         rootptr->right=insert_helper(rootptr->right,data,key);
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
     }
     return rootptr; //returns tree with nodes inserted
 
@@ -152,14 +132,6 @@ insert_helper(BstNode* rootptr,const K& key, const D& data)
  * D data to be inserted.
  */
 
-<<<<<<< HEAD
-template <typename K, typename D,typename comparator >
-BSTree<K,D,comparator>::void insert(const K& key, const D& data)
- {
-    rootptr = insert_helper(rootptr, key, data);
-    nodecount++;
- }
-=======
 /**
  * [insert description]
  * @param key  [key of the entry]
@@ -176,7 +148,6 @@ void BSTree<K,D,comparator>::insert(const K& key, const D& data)
 }
 
 
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 
 
 
@@ -189,15 +160,9 @@ void BSTree<K,D,comparator>::insert(const K& key, const D& data)
  *
  *
  */
-<<<<<<< HEAD
-template <typename K, typename D,typename comparator >
-typename BSTree<K,D,comparator>::iterator
-BSTree<K,D,comparator>::find(const K& key) const
-=======
  template <typename K, typename D, typename comparator >
  typename BSTree<K,D,comparator>::iterator
  BSTree<K,D,comparator>::find(const K& key) const
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 {
   BstNode * current{rootptr};
   while (current)
@@ -233,19 +198,12 @@ BSTree<K,D,comparator>::find(const K& key) const
  * ----------------------------------------------------------------------------
  */
     template <typename K, typename D,typename comparator >
-<<<<<<< HEAD
-    BstNode<K,D,comparator>::FindMin () const
-    {
-    	while(rootptr->left != NULL) rootptr = rootptr->left;
-    	return iterator{rootptr};
-=======
-    typename BSTree<K,D,comparator>::BstNode*
-    BSTree<K,D,comparator>::FindMin() const
+    typename BSTree<K,D,comparator>::BstNode*BSTree<K,D,comparator>::
+    FindMin() const
     {
     	while(rootptr->left != NULL)
       { rootptr = rootptr->left; }
     	return rootptr;
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
     }
 
 
@@ -385,13 +343,14 @@ public:
   iterator& operator++()
   {
     //if current has right child go right
-    if (current -> right != nullptr) {
+    if (current -> right != nullptr)
+    {
       current = current -> right;
       //now go to the leftmost node adn return it
       while (current-> left) {
         current = current->left;
       }
-      return *this;
+
     }
 
 
@@ -520,31 +479,6 @@ void BSTree<K,D,comparator>::copyHelper(BstNode * nodeptr)
      }
 
 
-<<<<<<< HEAD
-
-  /**
-    *[Put to operator << description]
-    *@param const BST<K,D,comp>& mytree [reference to the constant class type]
-    * -----------------------------------------------------------------------
-    * Overload of put to operator <<.It allows to print the key-value pair in
-    * chain with order.
-    */
-      template <typename K, typename D,typename  comparator >
-      std::ostream& operator << (std::ostream& os, const BSTree& mytree)
-      {
-
-       for (const auto& x : mytree)
-
-         { os << x.first << " : " << x.second << std::endl;}
-
-       return os;
-
-       }
-
-
-
-=======
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
     /**
      *  [clear description]
      *

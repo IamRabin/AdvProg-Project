@@ -59,11 +59,6 @@ private:
 
     D data;  // Data
     K key;  //Key value associated with data
-<<<<<<< HEAD
-    int nodecount; //counting number of nodes in the BST
-    std::pair<const K, D> node_data // data is stored in node_data
-=======
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 
     //int nodecount; //counting number of nodes in the BST
     BstNode(); //default constructor
@@ -130,16 +125,9 @@ public:
   * copy constructor and copy assignement make use of it.
   *
   */
-   void copyHelper(BstNode * node);
+   void copyHelper(BstNode * nodeptr);
 
- /**
-  * [copyHelper description]
-  * @param node [description]
-  * this function is used to copy recursively all the nodes of a tree,
-  * copy constructor and copy assignement make use of it.
-  *
-  */
-   void copyHelper(BstNode * node);
+
 
 
  /**[Move Semantics Description]
@@ -167,25 +155,13 @@ public:
 
 
 /**
-<<<<<<< HEAD
- *[Insert Description]
- * This function will allow to insert key and value in the tree with the use of
- * insert helper function
-=======
  *[insert_helper Description]
  * This function will allow to insert key and value in the tree.
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
  *------------------------------------------------------------------------------
  *Usage:insert(BstNode* root,D data,K key)
  *Usage: mytree.insert(root,"A string", 15);
  */
-<<<<<<< HEAD
- BstNode* inserthelper(BstNode* rootptr, const K& key,D& const data);
- void insert(const K& key, const D& data)
-
-=======
     BstNode* insert_helper(BstNode* rootptr, const K& key, const D& data);
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 
 
 /**
@@ -263,14 +239,6 @@ BstNode* rebuildTree(std::vector<node_data>& N, int start, int end);
 void balance();
 
 
-<<<<<<< HEAD
-/**
-* [clear description]
-* -------------------------------------------------------------------------
-* Deletes entire key-value pair from the tree.
-*/
- void clear();
-=======
 
    /**
     * [clear description]
@@ -278,7 +246,6 @@ void balance();
     * Deletes entire key-value pair from the tree.
     */
      void clear();
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 
 
 /**
@@ -310,10 +277,6 @@ void balance();
   * Overload of put to operator <<.It allows to print the key-value pair in
   * chain with order.
   */
-<<<<<<< HEAD
-    std::ostream& operator << (std::ostream& os,
-                              const BST<K,D,comparator>& mytree)
-=======
     friend std::ostream& operator<<(std::ostream& os, const BSTree& mytree)
     {
 
@@ -325,7 +288,6 @@ void balance();
 
    };
 
->>>>>>> ab74fa5226b8db7edb2e425f956e90176dbee873
 
 
 
