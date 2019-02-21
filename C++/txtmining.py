@@ -1,2 +1,0 @@
-impoprt nltk
-nltk.download()

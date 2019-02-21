@@ -31,6 +31,7 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {}
 
 
 
+
 /**** BSTree Implementation  ****/
 /**
  * [BSTree Constructor]
@@ -49,13 +50,14 @@ BSTree<K,D,comparator>::BstNode::~BstNode() {}
 
 
 /**
- *[BSTree Destructor]
+ * [BSTree Destructor]
  *-----------------------------------------------------------------------------
  *This will destroy the tree from the memory when the destructor is called or
  *when the tree goes out of scope.
  */
   template <typename K, typename D,typename comparator >
   BSTree<K,D,comparator>:: ~BSTree(){}
+
 
 
 
@@ -79,6 +81,7 @@ BSTree<K,D,comparator>::GetNewNode(const K& key, const D& data)
     return newNode;
 }
 */
+
 
 
 
@@ -128,6 +131,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
 {
   if ( node==nullptr) {return; }
   print(node->left);
+  std::cout<<  "key"<< " : " <<"data" << std::endl;
   std::cout<<  node->key << " : " << node->data << std::endl;
   print(node->right);
 }
@@ -190,8 +194,8 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
  * ----------------------------------------------------------------------------
  */
     template <typename K, typename D,typename comparator >
-    typename BSTree<K,D,comparator>::BstNode*BSTree<K,D,comparator>::
-    FindMin() const
+    typename BSTree<K,D,comparator>::BstNode*
+    BSTree<K,D,comparator>::FindMin() const
     {
       if ((rootptr==nullptr)) { return nullptr;};
       BstNode* current = rootptr.get();
@@ -206,10 +210,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
 
 
 /**
- * [Begin and End description]
- *
- * begin() and end () returns iterator to fully traverse the tree.
- * It also acts as a pointer to std::pair<const key,Entry>.
+ * begin() and end () returns iterator(s) to fully traverse the tree.
  */
 
     template <typename K, typename D, typename comparator >
@@ -340,14 +341,13 @@ public:
   iterator& operator++()
   {
     //if current has right child go right
-    if (current -> right != nullptr)
-    {
+    if (current -> right != nullptr) {
       current = current -> right;
       //now go to the leftmost node adn return it
       while (current-> left) {
         current = current->left;
       }
-
+      return *this;
     }
 
 
@@ -411,19 +411,29 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode> nodeptr)
 
   //copy Constructor, use copyHelper
   template <typename K, typename D,typename comparator>
-  BSTree<K,D,comparator>::BSTree(const BSTree& copy)
+  BSTree<K,D,comparator>::BSTree(const BSTree& source)
   {
+    std::cout<<"Copy Constructor Called..."<<endl;
     rootptr=nullptr;
-    copyHelper(copy.rootptr);
+    copyHelper(source.rootptr);
   }
 
   //copy assignment, use copyHelper to copy all members from one tree to the other
   template <typename K, typename D,typename comparator>
-  BSTree<K,D,comparator>& BSTree<K,D,comparator>::operator=(const BSTree& copy)
+  BSTree<K,D,comparator>& BSTree<K,D,comparator>::operator=(const BSTree& source)
   {
+
+    std::cout<<"Copy Assignment Called..."<<endl;
+    //check for self assignment tree1=tree1
+    if(this==&source)
+    {
+        return *this;
+    }
+
     clear();
-    copyHelper(copy.rootptr); //call helper to perform copycopyHelper
+    copyHelper(source.rootptr); //call helper to perform copycopyHelper
     return *this;
+
   }
 
 
@@ -510,7 +520,8 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode> nodeptr)
 
 
 
-   /********* Balance function Implementation **********/
+
+           /**** Balance function Implementation ****/
 
 
      //Construct Binary Tree recursively

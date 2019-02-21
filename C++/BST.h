@@ -119,8 +119,8 @@ public:
  *  Both the overloaded assignmnet operator and the copy constructor performs
  *  deep copy. Overloaded assignment only invoked if the object already exists.
  */
-   BSTree (const BSTree& copy);
-   BSTree& operator=(const BSTree& copy);
+   BSTree (const BSTree& source);
+   BSTree& operator=(const BSTree& source);
 
  /**
   * [copyHelper description]

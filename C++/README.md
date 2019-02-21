@@ -1,4 +1,5 @@
 # Programming Project
+This repo contains the project completed as an assessment for the `Advanced Programming` course of DSSC @ University of Trieste, Italy.
 ___
 https://codereview.stackexchange.com/questions/61671/binary-search-tree-c-implementation/61719
 
