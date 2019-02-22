@@ -1,5 +1,8 @@
 # Binary Search Tree
 
+![](Figures/BST_PIC.png )
+
+
 ##Introduction
 A binary search tree consists of nodes which itself is a small binary tree
 containing left pointer, right pointer and a data entry. As node itself is a
@@ -23,7 +26,7 @@ form as shown in figure 1 below.The iterators class are declared friends of
 consists of key-data pair which are the entry element in a node of a binary
 tree.
 
-![](Main/Heirarchy.png )
+![](Figures/Heirarchy.png )
 
  **Fig. 1** - Binary Search Tree Program Schematic
 
@@ -35,7 +38,8 @@ While designing  the program, some of the questions were staged as follows;
 - What type of access control can be set for the data members  and its function?.
 - Which classes can be a friend of the BST node to access its data members?
 
-![](Main/BSTree_class_type.png )
+![](Figures/code_snippet.png )
+
 
  **Fig. 2** - Snippet of Base type Binary Search Tree
 
@@ -70,22 +74,36 @@ and higher value keys are found on the right of the node.
 Testing was performed by using the 'main.cpp' file where all the member functions of the class BSTree was tested. After the test run were successfully performed, memory leak check was done using valgrind .
 At first, the code was compiles using gcc with debugging information on `$ gcc -Wall -g myprog.c -o myprog`.Then finally the memcheck tool was run using valgrind with the following output in fig 3. `[valgrind --leak-check=yes ./myprog]`
 
-
-**Fig. 3**
+![](Figures/valgrind.png)
+**Fig. 3**- Snippet of Valgrind result with no memory leak.
 
 ##Performance Comparison:
 
  Find function was used to perform lookup while recording the time it took to
- find the elements. The find function was called first in unbalanced tree and
- then its performance was compared with the performance given by `ordered map`.
- Similarly the performance of unbalanced tree was compared with the unordered map
- and finally the balanced tree performance was compared with the ordered map.
- The performance yields can be visually seen in fig 4 and and fig 5 below:
+ find the elements in different STL containers namely map, unordered map and our
+ binary search tree. At first the entries were limited up to 15 k and then increased
+ up to 10^6.The performance time can be visually seen in fig 4 and fig 5 below
+ which depicts the performance of the data structures with large and small data
+ entries respectively.
+
+![](Figures/Large_entry.png)
+
+**Fig. 4**- Comparing lookup time between STL data structures vs BST with entries up to 10^6.
+
+
+
+![](Figures/Small_Entries.png )
+
+**Fig. 5** - Comparing lookup time between STL data structures vs BST with entries up to 15k.
+
+
 
 
 
  ##Conclusion:
- The unbalanced binary search tree yielded out the worst performance time and unordered map provided the best overall performance. The overall performance of the balanced tree was satisfactory which was closer to ordered `map`. Our `BSTree` can be further optimized to achieve better performance.
-The other advantage of using BST over unordered map that uses hash table is that
-all keys can be received in sorted order. Moreover we can perform queries like finding the minimum, maximum elements in BST. The self balancing BSTs gives a guaranteed performance of O(log(n)) time but with hashing unordered map sometimes
-the operation may be costly in the event of resizing the unordered map.
+
+ In case of small amount of data entries, unordered map had the best performance
+ due to the fact that it had less hash key collision but when the entries
+ were increased our balanced binary search tree had the best performance with almost
+ constant search time. Unbalanced key showed the worst performance with both large
+ and smaller amount of entries.
