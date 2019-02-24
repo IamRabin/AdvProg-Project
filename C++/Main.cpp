@@ -81,9 +81,8 @@ void template_comparison_test()
 
         // Testing operator=
         std::cout << tree[1] << std::endl;
-        tree_1=tree;
         BSTree<int,int> tree_2{};
-        tree_2=tree_1;
+        tree_2=tree;
         template_comparison_test();
     }
 
