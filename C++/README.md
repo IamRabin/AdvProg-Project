@@ -1,25 +1,13 @@
-<<<<<<< HEAD
 # Programming Project
 This repo contains the project completed as an assessment for the `Advanced Programming` course of DSSC @ University of Trieste, Italy.
-___
 
-=======
 # Binary Search Tree
 
 ![](Figures/BST_PIC.png )
->>>>>>> a9da71cac8a7b4293e7a3e4abd15197e4ff6b0bb
 
 
 ## Introduction
 
-<<<<<<< HEAD
-
-##PostcardList Class for Python:
-
-This is a program in python that reads and write postcard addresses on text files.
-Postcard class was implemented.
-
-=======
 A binary search tree consists of nodes which itself is a small binary tree
 containing left pointer, right pointer and a data entry. As node itself is a
 small tree, the left and right pointer recursively points to sub-tree or nodes
@@ -37,14 +25,6 @@ cases of balanced and unbalanced binary search tree respectively.
 
 ## Type Heirarchy
 
-<<<<<<< HEAD
-| <a href="https://github.com/IamRabindra25" target="_blank">**Rabindra Khadka**</a> | <a href="https://github.com/t0m-R" target="_blank">**Tommaso Rodani**</a> |
-| :---: |:---:|
-| ![Rabindra](https://avatars3.githubusercontent.com/u/43570954?s=200) | ![Tomasso](https://avatars3.githubusercontent.com/u/43781037?s=200) |
-| <a href="http://github.com/IamRabindra25" target="_blank">`github.com/IamRabindra25`</a> | <a href="http://github.com/t0m-R" target="_blank">`github.com/t0m-R`</a> |
-
-##
-=======
 In the program, `BSTree` class defines `BSTNodes` and `Iterators` in a nested
 form as shown in figure 1 below.The iterators class are declared friends of
 `BstNode struct` so that it can access the data members of the node. Node
@@ -132,4 +112,4 @@ At first, the code was compiles using gcc with debugging information on `$ gcc -
  were increased our balanced binary search tree had the best performance with almost
  constant search time. Unbalanced key showed the worst performance with both large
  and smaller amount of entries.
->>>>>>> a9da71cac8a7b4293e7a3e4abd15197e4ff6b0bb
+
