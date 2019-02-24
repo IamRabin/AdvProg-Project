@@ -208,11 +208,13 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
 template <typename K, typename D,typename comparator >
 D& BSTree<K,D,comparator>::operator[] (const K& key )
 {
-    iterator itr = find(key);//get the underlying iterator by calling find
-    if (itr != end()){
+    std::pair< K, D>entry{key, D{}};
+    iterator itr=find(key);//get the underlying iterator by calling find
+    if (itr != end())
+    {
     return (*itr).second;
     }
-    insert(node_data{key, D{}});
+    insert(entry);
     return (*find(key)).second;
   }
 
@@ -444,8 +446,8 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
 
      //Construct Binary Tree recursively
      template <typename K, typename D, typename comparator >
-     void     BSTree<K,D,comparator>::
-     rebuildTree(std::vector<node_data>& N,int start,int end)
+     void BSTree<K,D,comparator>::
+     rebuildTree(std::vector<std::pair<const K, D>>& N,int start,int end)
      {
 
 
@@ -473,7 +475,7 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
       {
          iterator it{this->begin()};
          iterator end{this->end()};
-         std::vector<node_data> N;
+         std::vector<std::pair<const K, D>> N;
          std::cout<<N.size()<<std::endl;
          if(it==end)
          {

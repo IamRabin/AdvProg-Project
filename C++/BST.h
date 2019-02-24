@@ -67,9 +67,6 @@ private:
 
      };
 
-
-     using node_data = std::pair<const K, D>;// data is stored in node_data
-
      comparator mComp; //compartor used to compare and store elements.
      upTreeNode rootptr;//pointer to root node in BST.
 
