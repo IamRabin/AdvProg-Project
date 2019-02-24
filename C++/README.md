@@ -21,7 +21,7 @@ In this project, a templated binary  search tree has been implemented with its
 various functions. The performance of this constructed binary search tree was
 compared with the standard library class map and unordered map based on the
 cases of balanced and unbalanced binary search tree respectively.
->>>>>>> a9da71cac8a7b4293e7a3e4abd15197e4ff6b0bb
+
 
 ## Type Heirarchy
 
