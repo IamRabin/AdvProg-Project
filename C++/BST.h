@@ -51,8 +51,7 @@ template < typename K, typename D, typename comparator=std::less<K> >
 class BSTree
 {
 private:
-    struct BstNode;
-    typedef std::unique_ptr<BstNode> upTreeNode;
+
     struct BstNode
     {
     std::pair<const K, D> node_data;
@@ -60,17 +59,61 @@ private:
     upTreeNode right; // right child
     BstNode* par;  //parent
 
-    //int nodecount; //counting number of nodes in the BST
-    BstNode(); //default constructor
+
+    /**
+     *[BstNode Constructor]
+     * Constructor copies the value of key and data into a BST node.Creates a new
+     * empty node.
+     *-----------------------------------------------------------------------------
+     */
+     BstNode() {}; //default constructor
+
+    BstNode(std::pair<const K, D> entry)
+    : node_data{entry}, left{nullptr}, right{nullptr}, par{nullptr} {}
+
+    ~BstNode() noexcept {}; //destructor
+
     BstNode(std::pair<const K, D> entry);//constructor initialises the key-value
-    ~BstNode();//destructor
+
+    /**
+     *[BstNode Copy Constructor]
+     *This is the copy constructor for node.Source is the source node from where
+     *copy can be done.
+     */
+    BstNode(const BstNode& source): node_data{source.node_data},left{nullptr},
+    right{nullptr},parent{source.parent} { }
 
      };
 
+     using upTreeNode = std::unique_ptr<BstNode> ;
      comparator mComp; //compartor used to compare and store elements.
      upTreeNode rootptr;//pointer to root node in BST.
 
-     BstNode* FindMin() const;//function that returns pointer to min. key in tree
+
+     BstNode* FindMin() const noexcept;//function that returns pointer to min.key in tree
+
+     /**
+      * [copyHelper description]
+      * @param node [description]
+      * this function is used to copy recursively all the nodes of a tree,
+      * copy constructor and copy assignement make use of it.
+      *
+      */
+       void copyHelper(const std::unique_ptr<BstNode>& nodeptr);
+
+     /**
+      * [rebuildTree description]
+      * Rebuilds tree recursively from an ordered list of key value pairs with
+      * parameters starting element and end element of the list.
+      * -----------------------------------------------------------------------
+      */
+     void rebuildTree(std::vector<std::pair<const K, D>>& N, int start,int end);
+
+
+     void print() const noexcept;
+     void print(const upTreeNode&) const noexcept;
+
+
 
      friend class iterator;
      friend class const_iterator;
@@ -78,27 +121,28 @@ private:
 
 public:
 
-/**
- * [BSTree description]
- * Constructor: BSTree (comparator comp=comparator());
- * Usage:BSTree<string,int> mytree;
- * Usage:BSTree<string, int>mytree(mycompareFunction)
- * ----------------------------------------------------------------------
- * This constructor constructs a new empty tree and compares key based on the
- * choosen comparison type.
- */
-  BSTree(comparator comp=comparator());
+
+  /**
+   * [BSTree Constructor]
+   *
+   * @param comp [compares key based on comparison type.]
+   * ----------------------------------------------------------------------------
+   * This constructor builds a new tree. Initally the tree is empty and the
+   * root pointer is set to nullptr.
+   */
+    BSTree(comparator comp):mComp(comp)
+      {
+          rootptr=nullptr;
+       }
 
 
-
-/**
- *[~BSTree() description]
- * Destructor: ~ BSTree()
- * Usage: Implicit
- * ---------------------------------------------------------------------
- * Destroys the tree by deallocating memory.
- */
-   ~BSTree();
+  /**
+   * [BSTree Destructor]
+   *-----------------------------------------------------------------------------
+   *This will destroy the tree from the memory when the destructor is called or
+   *when the tree goes out of scope.
+   */
+   ~BSTree() noexcept {}
 
 
 /**
@@ -116,14 +160,7 @@ public:
    BSTree (const BSTree& copy);
    BSTree& operator=(const BSTree& copy);
 
- /**
-  * [copyHelper description]
-  * @param node [description]
-  * this function is used to copy recursively all the nodes of a tree,
-  * copy constructor and copy assignement make use of it.
-  *
-  */
-   void copyHelper(const std::unique_ptr<BstNode>& nodeptr);
+
 
 
  /**[Move Semantics Description]
@@ -136,8 +173,8 @@ public:
  *  based on whether the argument to the assignment operator is an lvalue
  *  or an rvalue.
  */
-    BSTree (BSTree<K,D,comparator> &&other);
-    BSTree& operator=(BSTree<K,D,comparator> &&other);
+    BSTree (BSTree<K,D,comparator> &&other) noexcept;
+    BSTree& operator=(BSTree<K,D,comparator> &&other) noexcept;
 
 
 /**
@@ -150,8 +187,7 @@ public:
  */
     void insert(std::pair<const K, D> entry);
 
-    void print() const;
-    void print(const upTreeNode&) const;
+
 
 
 
@@ -177,10 +213,10 @@ public:
  * begin() and end () returns iterator to fully traverse the tree.It also
  * acts as a pointer to std::pair<const key,Entry>.
  */
-  iterator begin() { return iterator{FindMin()}; }
-  iterator end() { return iterator{nullptr}; }
-  const_iterator begin() const { return const_iterator{FindMin()}; }
-  const_iterator end() const { return const_iterator{nullptr}; }
+  iterator begin() noexcept { return iterator{FindMin()}; }
+  iterator end() noexcept { return iterator{nullptr}; }
+  const_iterator begin() const noexcept { return const_iterator{FindMin()}; }
+  const_iterator end() const noexcept { return const_iterator{nullptr}; }
 
 /**
  *Usage:for (myTree<string, int>::const_iterator itr = i.cbegin();
@@ -190,8 +226,8 @@ public:
  * and past the last node element respectively.It cannot modify the
  * contents.
  */
-   const_iterator cbegin() const { return const_iterator{FindMin()}; }
-   const_iterator cend() const { return const_iterator{nullptr}; }
+   const_iterator cbegin() const noexcept { return const_iterator{FindMin()}; }
+   const_iterator cend() const noexcept { return const_iterator{nullptr}; }
 
    /**
     *[find Description]
@@ -202,7 +238,8 @@ public:
     * ends if it does not exits.
     */
 
-    iterator find(const K& key) const;
+    iterator find(const K& key);
+    const_iterator find(const K& key) const;
 
 /**
 * [balance description]
@@ -214,7 +251,7 @@ public:
 ** -----------------------------------------------------------------------
 */
 
-void rebuildTree(std::vector<std::pair<const K, D>>& N, int start, int end);
+
 void balance();
 
 
@@ -224,7 +261,7 @@ void balance();
     * -------------------------------------------------------------------------
     * Deletes entire key-value pair from the tree.
     */
-     void clear();
+     void clear() noexcept;
 
 
 /**

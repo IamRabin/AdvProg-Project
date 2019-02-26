@@ -2,61 +2,7 @@
 
 #include "BST.h"
 
-
-/**** BSTree::BstNode Implementation  ****/
-/**
- *[BstNode Constructor]
- * Constructor copies the value of key and data into a BST node.Creates a new
- * empty node.
- *-----------------------------------------------------------------------------
- */
- template <typename K, typename D,typename comparator >
- BSTree<K,D,comparator>::BstNode::BstNode() {}
-
-
-template <typename K, typename D,typename comparator >
-BSTree<K,D,comparator>::BstNode::BstNode(std::pair<const K, D> entry)
-: node_data{entry}, left{nullptr}, right{nullptr}, par{nullptr} {}
-
-
-/**
- *[BstNode Destructor]
- *This will destroy the node from the memory when the destructor is called or
- *the node goes out of scope
- * ---------------------------------------------------------------------------
- */
-template <typename K, typename D,typename comparator >
-BSTree<K,D,comparator>::BstNode::~BstNode() {}
-
-
-
-
-
 /**** BSTree Implementation  ****/
-/**
- * [BSTree Constructor]
- *
- * @param comp [compares key based on comparison type.]
- * ----------------------------------------------------------------------------
- * This constructor builds a new tree. Initally the tree is empty and all the
- * pointers are set to NULL.
- */
-  template <typename K, typename D,typename comparator >
-  BSTree<K,D,comparator>::BSTree(comparator comp):mComp(comp)
-    {
-        rootptr=nullptr;
-     }
-
-
-
-/**
- * [BSTree Destructor]
- *-----------------------------------------------------------------------------
- *This will destroy the tree from the memory when the destructor is called or
- *when the tree goes out of scope.
- */
-  template <typename K, typename D,typename comparator >
-  BSTree<K,D,comparator>:: ~BSTree(){}
 
 
 /**
@@ -71,8 +17,9 @@ template <typename K, typename D,typename comparator >
 void BSTree<K,D,comparator>::insert(std::pair<const K, D> entry)
 {
   std::unique_ptr<BstNode> newNode(new BstNode(entry));
-  if (rootptr == nullptr)
-    { rootptr = std::move(newNode);}
+  if (rootptr == nullptr//first case tree is empty
+    { rootptr = std::move(newNode);}//moving the content of newNode to rootptr
+                                    //setting a new emoty node.
   else
   {
     BstNode* parent = rootptr.get();
@@ -102,12 +49,12 @@ Used to debug tree functions.
  */
 
 template <typename K, typename D,typename comparator >
-void BSTree<K,D,comparator>::print() const
+void BSTree<K,D,comparator>::print() const noexcept
 { print(rootptr);}
 
 
 template <typename K, typename D,typename comparator >
-void BSTree<K,D,comparator>::print(const upTreeNode &node) const
+void BSTree<K,D,comparator>::print(const upTreeNode &node) const noexcept
 {
   if ( node==nullptr) {return; }
   print(node->left);
@@ -129,7 +76,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
  */
  template <typename K, typename D, typename comparator >
  typename BSTree<K,D,comparator>::iterator
- BSTree<K,D,comparator>::find(const K& key) const
+ BSTree<K,D,comparator>::find(const K& key)
 {
   BstNode * current{rootptr.get()};
   while (current)
@@ -171,7 +118,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const
  */
     template <typename K, typename D,typename comparator >
     typename BSTree<K,D,comparator>::BstNode*
-    BSTree<K,D,comparator>::FindMin() const
+    BSTree<K,D,comparator>::FindMin() const noexcept
     {
       if ((rootptr==nullptr)) { return nullptr;};
       BstNode* current = rootptr.get();
@@ -319,11 +266,6 @@ class BSTree<K,D,comparator>::const_iterator : public BSTree<K,D,comparator>::it
     //const dereference from iterator
     const std::pair<const K, D>& operator*() const { return it::operator*();}
 
-    //operators from iterator:
-    using it::operator++;
-    using it::operator==;
-    using it::operator!=;
-
 };
 
 
@@ -402,13 +344,13 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
     {
       // if the tree at the left hand side of the assignment isn't empty,
       // it's cleared. Existing nodes are deleted.
-     if (rootptr != NULL)
+     if (rootptr != nullptr)
       {
         std::cout << "Clearing out previous content at left hand side..." << std::endl;
-        rootptr = NULL;
+        rootptr = nullptr;
       }
       // if the other tree isn't empty, its root is moved.
-     if (other != NULL)
+     if (other != nullptr)
       {
         std::cout << "Moving root to the left-side." << std::endl;
         rootptr = std::move(other.rootptr);

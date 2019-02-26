@@ -86,6 +86,10 @@ void template_comparison_test()
         template_comparison_test();
     }
 
+//This means if you want to write out errors or warning that the consuming
+//program won't understand you have to write them to cerr so that you don't
+//confuse the second program that's reading your programs normal cout output.
+
    catch (std::runtime_error& err)
 
      {
