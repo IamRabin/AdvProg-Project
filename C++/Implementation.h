@@ -1,4 +1,7 @@
 
+ #ifndef __IMPLEMENTATION_INCLUDED__
+ #define __IMPLEMENTATION_INCLUDED__
+
 
 #include "BST.h"
 
@@ -17,7 +20,7 @@ template <typename K, typename D,typename comparator >
 void BSTree<K,D,comparator>::insert(std::pair<const K, D> entry)
 {
   std::unique_ptr<BstNode> newNode(new BstNode(entry));
-  if (rootptr == nullptr//first case tree is empty
+  if (rootptr == nullptr)//first case tree is empty
     { rootptr = std::move(newNode);}//moving the content of newNode to rootptr
                                     //setting a new emoty node.
   else
@@ -38,7 +41,7 @@ void BSTree<K,D,comparator>::insert(std::pair<const K, D> entry)
     { parent->left = std::move(newNode);}
 
 
-    }
+    };
 
   }
 
@@ -323,7 +326,7 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
  */
 
     template <typename K, typename D,typename comparator >
-    BSTree<K,D,comparator>:: BSTree(BSTree<K,D,comparator> &&other):
+    BSTree<K,D,comparator>:: BSTree(BSTree<K,D,comparator> &&other) noexcept:
     rootptr{ std::move(other.rootptr) }
     {std::cout << "Last tree constructed with move-constructor." << std::endl;}
 
@@ -340,7 +343,7 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
 
     template <typename K, typename D,typename comparator >
      BSTree<K,D,comparator>& BSTree<K,D,comparator>::
-     operator=(BSTree<K,D,comparator> &&other)
+     operator=(BSTree<K,D,comparator> &&other) noexcept
     {
       // if the tree at the left hand side of the assignment isn't empty,
       // it's cleared. Existing nodes are deleted.
@@ -368,7 +371,7 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
      *
      */
      template <typename K, typename D, typename comparator >
-     void BSTree<K,D,comparator>::clear()
+     void BSTree<K,D,comparator>::clear() noexcept
      {
        rootptr.reset();
        std::cout << "BSTree Cleared" << std::endl;
@@ -433,3 +436,4 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
           rebuildTree(N, 0, N.size()- 1);
 
        }
+#endif

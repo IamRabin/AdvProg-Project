@@ -1,9 +1,9 @@
 
-#include "Implementation.cpp"
+#include "Implementation.h"
 
 void template_comparison_test()
 {
-    BSTree<int,int,std::greater<int>> Atree;
+    BSTree<int,int> Atree;
     std::pair<int, int> pair;
     std::vector<int> treeholder{9,6,8,5,12,15};
     for(long unsigned int i=0; i< treeholder.size(); i++)
@@ -36,7 +36,7 @@ void template_comparison_test()
         tree.insert(p5);
 
 
-        tree.print();
+        //tree.print();
 
         tree.find(1);
         tree.find(3);
@@ -44,7 +44,7 @@ void template_comparison_test()
 
         tree.clear();
 
-        tree.print();
+        //tree.print();
         tree.insert(p1);
         tree.insert(p2);
         tree.insert(p3);
@@ -71,7 +71,7 @@ void template_comparison_test()
           std::cout << "Iterating through all nodes from beginning to the end of"
                        <<"the tree by inorder traversal:" << std::endl;
           BSTree<int, int>::iterator i = tree.begin();
-          while(i != tree.end())
+          while (i != tree.end())
           {
              std::cout << "[" << (*i).first << ", " << (*i).second << "] ";
              ++i;

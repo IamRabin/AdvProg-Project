@@ -37,6 +37,7 @@
  #include <vector>    //For container functions
  #include <algorithm>//For comparing,equal,max,find
  #include <stdexcept>//For out of range situation
+ #include "Implementation.h" 
 
 
  /**
@@ -54,6 +55,7 @@ private:
 
     struct BstNode
     {
+    using upTreeNode = std::unique_ptr<BstNode> ;
     std::pair<const K, D> node_data;
     upTreeNode left;   //left child
     upTreeNode right; // right child
@@ -73,20 +75,21 @@ private:
 
     ~BstNode() noexcept {}; //destructor
 
-    BstNode(std::pair<const K, D> entry);//constructor initialises the key-value
-
     /**
      *[BstNode Copy Constructor]
      *This is the copy constructor for node.Source is the source node from where
      *copy can be done.
      */
     BstNode(const BstNode& source): node_data{source.node_data},left{nullptr},
-    right{nullptr},parent{source.parent} { }
+    right{nullptr},par{source.par} { }
 
      };
 
-     using upTreeNode = std::unique_ptr<BstNode> ;
+
+     //using typename BstNode::upTreeNode;
+     //using BstNode::upTreeNode;
      comparator mComp; //compartor used to compare and store elements.
+     using upTreeNode = typename BstNode::upTreeNode;
      upTreeNode rootptr;//pointer to root node in BST.
 
 
@@ -130,6 +133,9 @@ public:
    * This constructor builds a new tree. Initally the tree is empty and the
    * root pointer is set to nullptr.
    */
+   BSTree() {};
+
+
     BSTree(comparator comp):mComp(comp)
       {
           rootptr=nullptr;
