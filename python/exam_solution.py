@@ -31,7 +31,6 @@ class PostcardList:
         with open(self._file, "r") as file:
             for line in file:
                 self._postcards.append(line)
-        file.close()
         self.parsePostcards()
 
 
@@ -47,7 +46,6 @@ class PostcardList:
         with open(filename, 'w') as file:
             for line in self._postcards:
                 file.write(line)
-        file.close()
 
     def updateFile(self):
         """
@@ -70,7 +68,6 @@ class PostcardList:
         with open(self._file, 'r') as file:
             for line in file:
                 self._postcards.append(line)
-        file.close()
         self.parsePostcards()
 
 
@@ -169,11 +166,3 @@ class PostcardList:
             for r in self._to[receiver]:
                 receiver_postcards.append(self._postcards[r])
         return receiver_postcards
-
-
-
-
-
-
-
-
