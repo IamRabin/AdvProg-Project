@@ -30,12 +30,12 @@ void BSTree<K,D,comparator>::insert(std::pair<const K, D> entry)
     while (current != nullptr)
      {
       parent = current;
-      if (current-> node_data.first < entry.first)
+      if ( mComp(current-> node_data.first, entry.first) )
         { current = current->right.get(); }
       else
         { current = current->left.get(); }
       }
-    if (parent->node_data.first < entry.first)
+    if ( mComp(parent->node_data.first, entry.first) )
     { parent->right = std::move(newNode);}
     else
     { parent->left = std::move(newNode);}
@@ -85,7 +85,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const noexcept
   while (current)
   {
     // when key found return iterator to the node that holds it
-    if (current->node_data.first == key)
+    if (mComp(current->node_data.first, key) && mComp(key, current->node_data.first))
     {
       //std::cout<< "Key Found" << std::endl;
       return iterator{current};
@@ -202,14 +202,12 @@ D& BSTree<K,D,comparator>::operator[] (const K& key )
  * It moves only forward, implemented with the operator++ overload.
  */
 template <typename K, typename D,typename comparator>
-class BSTree<K,D,comparator>::iterator
+class BSTree<K,D,comparator>::iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,D>>
 {
 
   friend class BSTree;
   using node = BSTree<K,D,comparator>::BstNode;
-  //using node_data = typename BSTree<K,D>::node_data;
 
-private:
   // pointer to the node currently used by iterator
   node * current;
 
@@ -231,6 +229,7 @@ public:
       while (current-> left.get()) {
         current = current->left.get();
       }
+      return *this;
     }
 
 
@@ -244,13 +243,13 @@ public:
         up = up->par;
       }
       current = up;
+      return *this;
     }
-    return *this;
   }
 
     // comparison operators
     bool operator==(const iterator& other) { return (current == other.current);}
-    bool operator!=(const iterator& other) { return (current != other.current);}
+    bool operator!=(const iterator& other) { return !(current == other.current);}
   };
 
 

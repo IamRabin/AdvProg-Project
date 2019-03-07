@@ -44,6 +44,13 @@ void template_comparison_test()
 
         tree.clear();
 
+        tree.insert(p3);
+        tree.insert(p4);
+        tree.insert(p5);
+
+
+        //  Testing different kind of constructors.
+
         //tree.print();
         tree.insert(p1);
         tree.insert(p2);
@@ -64,17 +71,16 @@ void template_comparison_test()
 
     BSTree<int,int> mytree3;
     mytree3=mytree2; //calls the assignment operator overload
-    std::cout<<mytree3<<std::endl;
+    std::cout<<tree<<std::endl;
 
 
          //Testing Iterator
           std::cout << "Iterating through all nodes from beginning to the end of"
                        <<"the tree by inorder traversal:" << std::endl;
-          BSTree<int, int>::iterator i = tree.begin();
-          while (i != tree.end())
+
+          for (BSTree<int, int>::iterator i = tree.begin(); i != tree.end(); ++i)
           {
              std::cout << "[" << (*i).first << ", " << (*i).second << "] ";
-             ++i;
           }
 
 
