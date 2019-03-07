@@ -3,7 +3,7 @@
 
 void template_comparison_test()
 {
-    BSTree<int,int> Atree;
+    BSTree<int,int,std::greater<int>> Atree;
     std::pair<int, int> pair;
     std::vector<int> treeholder{9,6,8,5,12,15};
     for(long unsigned int i=0; i< treeholder.size(); i++)
@@ -19,7 +19,6 @@ void template_comparison_test()
     try
      {
 
-        BSTree<int,int> tree{};
 
 
         //inserting for test
@@ -28,6 +27,8 @@ void template_comparison_test()
         std::pair<int,int> p3(3,3);
         std::pair<int,int> p4(4,4);
         std::pair<int,int> p5(5,5);
+
+        BSTree<int,int> tree{};
 
         tree.insert(p1);
         tree.insert(p2);
@@ -42,21 +43,6 @@ void template_comparison_test()
         tree.find(3);
         tree.find(10);
 
-        tree.clear();
-
-        tree.insert(p3);
-        tree.insert(p4);
-        tree.insert(p5);
-
-
-        //  Testing different kind of constructors.
-
-        //tree.print();
-        tree.insert(p1);
-        tree.insert(p2);
-        tree.insert(p3);
-        tree.insert(p4);
-        tree.insert(p5);
 
 
         //  Testing different kind of constructors.
@@ -66,7 +52,7 @@ void template_comparison_test()
           std::cout << mytree << std::endl;
           std::cout << mytree2 << std::endl;
 
-          tree=tree; //calls the copy constructor, not the assignment
+          mytree=tree; //calls the copy constructor, not the assignment
           std::cout<<mytree2<<std::endl;
 
     BSTree<int,int> mytree3;
@@ -78,9 +64,11 @@ void template_comparison_test()
           std::cout << "Iterating through all nodes from beginning to the end of"
                        <<"the tree by inorder traversal:" << std::endl;
 
-          for (BSTree<int, int>::iterator i = tree.begin(); i != tree.end(); ++i)
+          BSTree<int, int>::iterator i = tree.begin();
+          while (i != tree.end())
           {
              std::cout << "[" << (*i).first << ", " << (*i).second << "] ";
+             ++i;
           }
 
 

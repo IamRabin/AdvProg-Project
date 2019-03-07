@@ -37,7 +37,7 @@
  #include <vector>    //For container functions
  #include <algorithm>//For comparing,equal,max,find
  #include <stdexcept>//For out of range situation
- #include "Implementation.h" 
+
 
 
  /**
@@ -191,7 +191,7 @@ public:
 * Insert a record into the tree. K Key value of the record.
 * D data to be inserted.
  */
-    void insert(std::pair<const K, D> entry);
+    void insert(const std::pair<const K, D> entry);
 
 
 

@@ -17,7 +17,7 @@
  * D data to be inserted.
  */
 template <typename K, typename D,typename comparator >
-void BSTree<K,D,comparator>::insert(std::pair<const K, D> entry)
+void BSTree <K,D,comparator> ::insert(const std::pair<const K, D> entry)
 {
   std::unique_ptr<BstNode> newNode(new BstNode(entry));
   if (rootptr == nullptr)//first case tree is empty
@@ -85,7 +85,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const noexcept
   while (current)
   {
     // when key found return iterator to the node that holds it
-    if (mComp(current->node_data.first, key) && mComp(key, current->node_data.first))
+    if (!mComp(current->node_data.first, key) && !mComp(key, current->node_data.first))
     {
       //std::cout<< "Key Found" << std::endl;
       return iterator{current};
@@ -202,10 +202,9 @@ D& BSTree<K,D,comparator>::operator[] (const K& key )
  * It moves only forward, implemented with the operator++ overload.
  */
 template <typename K, typename D,typename comparator>
-class BSTree<K,D,comparator>::iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,D>>
+class BSTree<K,D,comparator>::iterator: public std::iterator<std::forward_iterator_tag, std::pair<const K,D>>
 {
 
-  friend class BSTree;
   using node = BSTree<K,D,comparator>::BstNode;
 
   // pointer to the node currently used by iterator
@@ -219,7 +218,7 @@ public:
   //deference operator, return std::pair<const K,D> of current node
   std::pair<const K, D>& operator*() const { return current-> node_data; }
 
-  // forward operator, to move iterator to next node
+  // forward operator, to move iterator to next node, preincrement
   iterator& operator++()
   {
     //if current has right child go right
@@ -247,9 +246,39 @@ public:
     }
   }
 
+// iterator& operator++(int)
+//
+// {
+//
+//   //if current has right child go right
+//   if (current -> right != nullptr) {
+//     current = current -> right.get();
+//     //now go to the leftmost node adn return it
+//     while (current-> left.get()) {
+//       current = current->left.get();
+//     }
+//     return *this;
+//   }
+//
+//
+//   //if no any right child found,walk up till it finds the right child & return
+//
+//
+//   else {
+//     node * up = current -> par;
+//     while ( up != nullptr && current == up->right.get()) {
+//       current = up;
+//       up = up->par;
+//     }
+//     current = up;
+//     return *this;
+//   }
+// }
+
+
     // comparison operators
     bool operator==(const iterator& other) { return (current == other.current);}
-    bool operator!=(const iterator& other) { return !(current == other.current);}
+    bool operator!=(const iterator& other) { return (current != other.current);}
   };
 
 
