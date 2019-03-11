@@ -1,19 +1,8 @@
 
 #include "Implementation.h"
 
-void template_comparison_test()
-{
-    BSTree<int,int,std::greater<int>> Atree;
-    std::pair<int, int> pair;
-    std::vector<int> treeholder{9,6,8,5,12,15};
-    for(long unsigned int i=0; i< treeholder.size(); i++)
-    {
-        pair = {treeholder[i],treeholder[i]};
-        Atree.insert(pair);
-    }
-    std::cout << "inserted treeholder={9,6,8,5,12,15} " << std::endl;
-    std::cout << Atree << std::endl;
-}
+
+
  int main()
 {
     try
@@ -67,7 +56,7 @@ void template_comparison_test()
           BSTree<int, int>::iterator i = tree.begin();
           while (i != tree.end())
           {
-             std::cout << "[" << (*i).first << ", " << (*i).second << "] ";
+             std::cout << "[" << (*i).first << ", " << (*i).second << "] "<<std::endl;
              ++i;
           }
 
@@ -77,7 +66,8 @@ void template_comparison_test()
         std::cout << tree[1] << std::endl;
         BSTree<int,int> tree_2{};
         tree_2=tree;
-        template_comparison_test();
+        
+
     }
 
 //This means if you want to write out errors or warning that the consuming

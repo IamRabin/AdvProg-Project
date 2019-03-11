@@ -191,7 +191,7 @@ public:
 * Insert a record into the tree. K Key value of the record.
 * D data to be inserted.
  */
-    void insert(const std::pair<const K, D> entry);
+    void insert(const std::pair<const K, D>& entry);
 
 
 
@@ -302,9 +302,9 @@ void balance();
     friend std::ostream& operator<<(std::ostream& os, const BSTree& mytree)
     {
 
-     for (const auto& x : mytree)
+     for (const auto& entry : mytree)
 
-       { os << x.first << ": " << x.second << std::endl;}
+       { os << entry.first << ": " << entry.second << std::endl;}
 
      return os;
 

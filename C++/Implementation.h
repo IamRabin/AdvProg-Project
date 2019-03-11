@@ -17,12 +17,12 @@
  * D data to be inserted.
  */
 template <typename K, typename D,typename comparator >
-void BSTree <K,D,comparator> ::insert(const std::pair<const K, D> entry)
+void BSTree <K,D,comparator> ::insert(const std::pair<const K, D>& entry)
 {
   std::unique_ptr<BstNode> newNode(new BstNode(entry));
   if (rootptr == nullptr)//first case tree is empty
     { rootptr = std::move(newNode);}//moving the content of newNode to rootptr
-                                    //setting a new emoty node.
+                                    //setting a new empty node.
   else
   {
     BstNode* parent = rootptr.get();
@@ -87,7 +87,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const noexcept
     // when key found return iterator to the node that holds it
     if (!mComp(current->node_data.first, key) && !mComp(key, current->node_data.first))
     {
-      //std::cout<< "Key Found" << std::endl;
+      std::cout<< "Key Found" << std::endl;
       return iterator{current};
     }
     // if the key to be found is smaller than current one, go left
@@ -103,7 +103,7 @@ void BSTree<K,D,comparator>::print(const upTreeNode &node) const noexcept
       current = current -> right.get();}
   }
 
-  //std::cout<<"Key not found"<<std::endl;
+   std::cout<<"Key not found"<<std::endl;
   // if the key is not found, return end, that returns an iterator to nullptr
   return end();
 }
@@ -246,34 +246,6 @@ public:
     }
   }
 
-// iterator& operator++(int)
-//
-// {
-//
-//   //if current has right child go right
-//   if (current -> right != nullptr) {
-//     current = current -> right.get();
-//     //now go to the leftmost node adn return it
-//     while (current-> left.get()) {
-//       current = current->left.get();
-//     }
-//     return *this;
-//   }
-//
-//
-//   //if no any right child found,walk up till it finds the right child & return
-//
-//
-//   else {
-//     node * up = current -> par;
-//     while ( up != nullptr && current == up->right.get()) {
-//       current = up;
-//       up = up->par;
-//     }
-//     current = up;
-//     return *this;
-//   }
-// }
 
 
     // comparison operators
@@ -464,4 +436,7 @@ void BSTree<K,D,comparator>::copyHelper(const std::unique_ptr<BstNode>& nodeptr)
           rebuildTree(N, 0, N.size()- 1);
 
        }
+
+
+
 #endif
