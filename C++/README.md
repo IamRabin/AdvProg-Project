@@ -112,4 +112,3 @@ At first, the code was compiles using gcc with debugging information on `$ gcc -
  were increased our balanced binary search tree had the best performance with almost
  constant search time. Unbalanced key showed the worst performance with both large
  and smaller amount of entries.
-
